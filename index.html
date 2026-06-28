@@ -177,6 +177,17 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
   </div>
 </div>
 
+<!-- VIEW BRACKET OVERLAY -->
+<div id="viewOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.96);z-index:5000;flex-direction:column;overflow:hidden">
+  <div style="background:#080808;border-bottom:2px solid var(--gold);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <div id="viewName" style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold)"></div>
+    <button onclick="document.getElementById('viewOverlay').style.display='none'" style="color:var(--chalk-d);font-size:13px;padding:6px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;background:rgba(255,255,255,0.05)">✕ Close</button>
+  </div>
+  <div style="overflow-x:auto;overflow-y:auto;flex:1;padding:10px 0 20px;-webkit-overflow-scrolling:touch">
+    <div class="bracket" id="viewBracketEl" style="min-width:1000px;max-width:1380px;margin:0 auto;padding:0 6px"></div>
+  </div>
+</div>
+
 <div class="surprise" id="surprise">
   <div style="font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:3px;color:var(--chalk-d)">PICKS LOCKED 🔒</div>
   <img src="gabriel-arsenal.gif" class="surprise-gif" alt="">
@@ -246,6 +257,10 @@ const RABB={R32:"R32",R16:"R16",QF:"QF",SF:"SF",Final:"Final"};
 const ROUND_DATES={R16:"Jul 4-6",QF:"Jul 11",SF:"Jul 15",Final:"Jul 19"};
 const PTS={R32:1,R16:2,QF:4,SF:8,Final:16,Champion:32};
 const ADMIN_PW="worldcup2026";
+// Picks lock at 4pm ET June 29 2026 (ET = UTC-4 in summer)
+const PICK_DEADLINE = new Date("2026-06-29T20:00:00Z");
+function isPastDeadline(){ return new Date() >= PICK_DEADLINE; }
+function deadlineStr(){ return "Picks locked · Deadline was Jun 29 @ 4pm ET"; }
 
 const LOCKED={R32:{0:{winner:"Canada",score:"1-0"}}};
 
@@ -332,6 +347,7 @@ function cascadeClear(rnd,changedIdx){
 
 function setPick(rnd,idx,team){
   if(myLocked)return;
+  if(isPastDeadline()){alert('Picks are locked — deadline has passed.');return;}
   if(isMatchLocked(rnd,idx))return;
   if(!myName){document.getElementById('nameInput').focus();alert('Enter your name first!');return;}
   picks[rnd][idx]=team;
@@ -483,15 +499,16 @@ function makeCenter(){
 function updateHint(){
   const h=document.getElementById('bracketHint');
   if(myLocked){h.textContent='🔒 Picks locked — check back as results come in';h.style.color='var(--green)';return;}
-  if(!myName){h.textContent='Enter your name above · tap teams to pick winners';h.style.color='';return;}
-  h.textContent='Tap teams to pick winners all the way to the champion';h.style.color='';
+  if(isPastDeadline()){h.textContent='⏰ Deadline passed — picks are now locked (Jun 29 @ 4pm ET)';h.style.color='var(--red)';return;}
+  if(!myName){h.textContent='Enter your name above · tap teams to pick winners · deadline Jun 29 @ 4pm ET';h.style.color='';return;}
+  h.textContent='Tap teams to pick winners all the way to the champion · locks Jun 29 @ 4pm ET';h.style.color='';
 }
 
 function updateBar(){
   const btn=document.getElementById('submitBtn');
   const prog=document.getElementById('submitProg');
   const bar=document.getElementById('submitBar');
-  if(myLocked){bar.style.display='none';return;}
+  if(myLocked||isPastDeadline()){bar.style.display='none';return;}
   bar.style.display='flex';
   const done=countPicks();
   prog.textContent=`${done} / 31 picks`;
@@ -517,6 +534,7 @@ window.onName=function(val){
 }
 
 window.doSubmit=async function(){
+  if(isPastDeadline()){alert('Deadline has passed — picks are locked.');return;}
   if(!myName||!allPicksDone())return;
   await saveEntry(myName,JSON.parse(JSON.stringify({...picks})));
   myLocked=true;
@@ -531,21 +549,79 @@ window.doSubmit=async function(){
 function renderLB(){
   const el=document.getElementById('lbEl');
   const list=Object.values(entries);
+  const past=isPastDeadline();
   if(!list.length){el.innerHTML='<div class="lb-empty">No picks yet.<br>Share <strong>thomassacks.github.io/WC2026</strong><br>with your crew!</div>';return;}
-  const board=list.map(e=>({name:e.name,score:scoreEntry(e),champ:e.picks?.Champion||e.picks?.Final?.[0]})).sort((a,b)=>b.score-a.score);
+  const board=list.map(e=>({name:e.name,score:scoreEntry(e),champ:e.picks?.Champion||e.picks?.Final?.[0],entry:e})).sort((a,b)=>b.score-a.score);
   el.innerHTML='';
+  if(past){
+    const note=document.createElement('div');
+    note.style.cssText='font-size:10px;color:var(--chalk-d);margin-bottom:12px;text-align:center';
+    note.textContent='Tap a name to view their full bracket';
+    el.appendChild(note);
+  } else {
+    const note=document.createElement('div');
+    note.style.cssText='font-size:10px;color:var(--chalk-d);margin-bottom:12px;text-align:center';
+    note.textContent='Champion picks hidden until deadline (Jun 29 @ 4pm ET)';
+    el.appendChild(note);
+  }
   board.forEach((e,i)=>{
     const rc=i===0?'var(--gold)':i===1?'#999':i===2?'#cd7f32':'var(--chalk-d)';
-    const row=document.createElement('div');row.className='lb-row'+(i===0?' top':'');
+    const row=document.createElement('div');
+    row.className='lb-row'+(i===0?' top':'');
+    row.style.cursor=past?'pointer':'default';
+    const champHtml=past&&e.champ?fl(e.champ,13,9)+' <span>'+e.champ+'</span>':'<span style="opacity:0.3">Hidden until deadline</span>';
     row.innerHTML=`
       <div class="lb-rank" style="color:${rc}">${i+1}</div>
       <div class="lb-info">
-        <div class="lb-name">${e.name} <span style="font-size:8px;opacity:0.4">🔒</span></div>
-        <div class="lb-champ">${e.champ?fl(e.champ,13,9)+' <span>'+e.champ+'</span>':'—'}</div>
+        <div class="lb-name">${e.name} <span style="font-size:8px;opacity:0.4">🔒</span>${past?'<span style="font-size:8px;color:var(--gold);margin-left:4px">tap to view →</span>':''}</div>
+        <div class="lb-champ">${champHtml}</div>
       </div>
       <div><div class="lb-score" style="color:${i===0?'var(--gold)':'var(--chalk)'}">${e.score}</div><div class="lb-pts">pts</div></div>`;
+    if(past) row.onclick=()=>viewEntry(e.entry);
     el.appendChild(row);
   });
+}
+
+// View another player's bracket (read-only overlay)
+let viewingEntry=null;
+function viewEntry(entry){
+  viewingEntry=entry;
+  const overlay=document.getElementById('viewOverlay');
+  document.getElementById('viewName').textContent=entry.name+"'s Bracket";
+  renderViewBracket(entry);
+  overlay.style.display='flex';
+}
+
+function renderViewBracket(entry){
+  const el=document.getElementById('viewBracketEl');
+  el.innerHTML='';
+  // Temporarily swap picks
+  const savedPicks=picks;
+  const savedName=myName;
+  const savedLocked=myLocked;
+  // Use entry picks for rendering
+  picks=JSON.parse(JSON.stringify(entry.picks||{}));
+  ROUNDS.forEach(r=>{picks[r]=picks[r]||{};});
+  picks.Champion=picks.Champion||null;
+  myName=entry.name;
+  myLocked=true;
+  applyLocked();
+
+  el.appendChild(makeHalfCol('R32',0,7,'lc'));
+  el.appendChild(makeHalfCol('R16',0,3,'lc'));
+  el.appendChild(makeHalfCol('QF',0,1,'lc'));
+  el.appendChild(makeHalfCol('SF',0,0,'lc'));
+  el.appendChild(makeCenter());
+  el.appendChild(makeHalfCol('SF',1,1,'rc'));
+  el.appendChild(makeHalfCol('QF',2,3,'rc'));
+  el.appendChild(makeHalfCol('R16',4,7,'rc'));
+  el.appendChild(makeHalfCol('R32',8,15,'rc'));
+
+  // Restore
+  picks=savedPicks;
+  myName=savedName;
+  myLocked=savedLocked;
+  applyLocked();
 }
 
 // ── ADMIN ─────────────────────────────────────────────────────────────────────

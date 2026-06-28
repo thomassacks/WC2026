@@ -20,7 +20,6 @@ button,input{font-family:'Inter',sans-serif;border:none;outline:none;background:
 button{cursor:pointer}
 img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:middle;flex-shrink:0}
 
-/* HEADER */
 .hdr{background:#080808;border-bottom:2px solid var(--gold);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;gap:10px;flex-wrap:wrap}
 .hdr-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:var(--gold);line-height:1}
 .hdr-sub{font-size:8px;letter-spacing:2px;color:var(--chalk-d);text-transform:uppercase}
@@ -30,8 +29,9 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
 .name-input::placeholder{color:rgba(255,255,255,0.18)}
 .name-input:disabled{color:var(--chalk-d);cursor:not-allowed;border-color:rgba(201,168,76,0.1)}
 .lock-badge{font-size:9px;color:var(--green);background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.25);border-radius:3px;padding:3px 7px;white-space:nowrap;display:none}
+.saving-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);display:none;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.3}50%{opacity:1}}
 
-/* TABS */
 .tabs{display:flex;background:#060606;border-bottom:1px solid var(--border)}
 .tab{flex:1;padding:9px 4px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:1.5px;text-align:center;color:var(--chalk-d);background:transparent;border-bottom:2px solid transparent;transition:all 0.15s;text-transform:uppercase}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
@@ -40,50 +40,25 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
 .view.active{display:block;animation:fi 0.18s ease}
 @keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 
-/* ══ BRACKET ══ */
+/* BRACKET */
 .bracket-wrap{overflow-x:auto;padding:10px 0 70px;-webkit-overflow-scrolling:touch}
 .bracket-hint{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:3px;color:var(--chalk-d);text-align:center;padding:6px;text-transform:uppercase}
-
-.bracket{
-  display:grid;
-  grid-template-columns: repeat(4,minmax(140px,1fr)) 100px repeat(4,minmax(140px,1fr));
-  min-width:1000px;max-width:1380px;
-  margin:0 auto;padding:0 6px;
-  position:relative;
-}
-
-/* column */
-.bc{display:flex;flex-direction:column;position:relative}
+.bracket{display:grid;grid-template-columns:repeat(4,minmax(140px,1fr)) 100px repeat(4,minmax(140px,1fr));min-width:1000px;max-width:1380px;margin:0 auto;padding:0 6px}
+.bc{display:flex;flex-direction:column}
 .bc-lbl{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-align:center;padding:3px 2px 6px;border-bottom:1px solid rgba(201,168,76,0.12);margin-bottom:4px;text-transform:uppercase}
-
-/* spacer between matches */
 .bsp{flex-shrink:0}
-
-/* match */
-.bm{margin:1px 3px;position:relative}
+.bm{margin:1px 3px}
 .bm-meta{font-size:8px;color:var(--chalk-d);padding:0 5px 1px;font-family:'Oswald',sans-serif;letter-spacing:0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bm-inner{background:var(--bg3);border:1px solid var(--border);border-radius:3px;overflow:hidden}
-
-/* Connector lines — left side goes right, right side goes left */
-.bc.lc .bm::after{content:'';position:absolute;right:-3px;top:50%;width:3px;height:1px;background:var(--line)}
-.bc.rc .bm::before{content:'';position:absolute;left:-3px;top:50%;width:3px;height:1px;background:var(--line)}
-
-/* team row */
-.bt{
-  display:flex;align-items:center;gap:5px;padding:5px 6px;
-  font-size:10px;font-weight:500;cursor:pointer;
-  border-bottom:1px solid rgba(255,255,255,0.04);
-  border-left:2px solid transparent;min-height:25px;
-  user-select:none;transition:background 0.08s;
-}
+.bc.lc .bm{position:relative}.bc.lc .bm::after{content:'';position:absolute;right:-3px;top:50%;width:3px;height:1px;background:var(--line)}
+.bc.rc .bm{position:relative}.bc.rc .bm::before{content:'';position:absolute;left:-3px;top:50%;width:3px;height:1px;background:var(--line)}
+.bt{display:flex;align-items:center;gap:5px;padding:5px 6px;font-size:10px;font-weight:500;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);border-left:2px solid transparent;min-height:25px;user-select:none;transition:background 0.08s}
 .bt:last-child{border-bottom:none}
 .bt:hover:not(.tbd):not(.nop){background:rgba(201,168,76,0.09);border-left-color:rgba(201,168,76,0.3)}
 .bt.tbd{color:var(--chalk-d);opacity:0.28;cursor:default;font-style:italic}
 .bt.nop{cursor:default}
 .bt .bn{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.2px}
 .bt .bsc{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;flex-shrink:0;min-width:14px;text-align:right;color:var(--chalk-m)}
-
-/* states */
 .bt.picked{background:rgba(201,168,76,0.1);border-left-color:var(--gold)}
 .bt.picked .bn{color:var(--gold-l);font-weight:600}
 .bt.correct{background:var(--green-bg);border-left-color:var(--green)}
@@ -93,7 +68,6 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
 .bt.wrong .bn{color:var(--red);text-decoration:line-through}
 .bt-actual{display:flex;align-items:center;gap:5px;padding:3px 6px 4px 8px;font-size:9px;color:var(--green);background:rgba(39,174,96,0.06);border-bottom:1px solid rgba(255,255,255,0.03)}
 
-/* center */
 .bc-center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 3px;gap:5px}
 .c-lbl{font-family:'Oswald',sans-serif;font-size:7.5px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;text-align:center}
 .c-trophy{font-size:42px;filter:drop-shadow(0 0 14px rgba(201,168,76,0.8));animation:glow 2.5s ease-in-out infinite alternate;line-height:1;margin:3px 0}
@@ -108,7 +82,6 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
 .c-champ-lbl{font-size:7px;letter-spacing:2px;color:var(--chalk-d);font-family:'Oswald',sans-serif;text-transform:uppercase}
 .c-user{font-size:7px;color:var(--chalk-d);letter-spacing:1.5px;margin-top:6px;font-family:'Oswald',sans-serif;text-align:center;text-transform:uppercase}
 
-/* submit bar */
 .submit-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(0deg,rgba(6,6,6,0.98) 70%,transparent);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:10px;z-index:100;pointer-events:none}
 .submit-bar *{pointer-events:auto}
 .submit-btn{background:var(--gold);color:#111;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;padding:10px 28px;border-radius:3px;text-transform:uppercase}
@@ -129,6 +102,7 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
 .lb-champ{font-size:10px;color:var(--chalk-d);margin-top:2px;display:flex;align-items:center;gap:4px}
 .lb-score{font-family:'Bebas Neue',sans-serif;font-size:26px}
 .lb-pts{font-size:9px;color:var(--chalk-d)}
+.lb-loading{text-align:center;color:var(--chalk-d);padding:30px;font-size:12px}
 
 /* ADMIN */
 .admin-box{background:var(--bg2);border:1px solid rgba(201,168,76,0.18);border-radius:5px;padding:18px;max-width:280px}
@@ -147,7 +121,6 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
 .admin-score-label{font-size:9px;color:var(--chalk-d);flex:1}
 .admin-save{margin-top:16px;background:var(--gold);color:#111;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;padding:10px 24px;border-radius:3px}
 
-/* SURPRISE */
 .surprise{position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;text-align:center}
 .surprise.show{display:flex;animation:fi 0.3s ease}
 .surprise-gif{width:min(260px,78vw);border-radius:5px;border:2px solid var(--red);box-shadow:0 0 40px rgba(231,76,60,0.4)}
@@ -165,6 +138,7 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
 <div class="hdr">
   <div><div class="hdr-logo">WC2026</div><div class="hdr-sub">Bracket Challenge</div></div>
   <div class="hdr-right">
+    <div id="savingDot" class="saving-dot"></div>
     <label class="name-label">Name</label>
     <input class="name-input" id="nameInput" type="text" placeholder="Your name…" oninput="onName(this.value)">
     <div id="lockBadge" class="lock-badge">🔒 Locked</div>
@@ -192,7 +166,7 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
   <div class="page">
     <div class="ph">Standings</div>
     <div class="psub">R32=1 · R16=2 · QF=4 · SF=8 · Final=16 · Champion=32 pts</div>
-    <div id="lbEl"></div>
+    <div id="lbEl"><div class="lb-loading">Loading…</div></div>
   </div>
 </div>
 
@@ -207,12 +181,29 @@ img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:
   <div style="font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:3px;color:var(--chalk-d)">PICKS LOCKED 🔒</div>
   <img src="gabriel-arsenal.gif" class="surprise-gif" alt="">
   <div class="surprise-title">SENT OFF. NO CHANGES.</div>
-  <div class="surprise-sub">Your bracket is locked. Check back as results come in.</div>
+  <div class="surprise-sub">Your bracket is locked in. Check back as results come in.</div>
   <button class="surprise-close" onclick="document.getElementById('surprise').classList.remove('show')">Close</button>
 </div>
 
-<script>
-// ── FLAGS ─────────────────────────────────────────────────────────────────────
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDO6bjVVfEeVS9B5joIF4Kv4vqk_zm6MUo",
+  authDomain: "wc2026-ee247.firebaseapp.com",
+  databaseURL: "https://wc2026-ee247-default-rtdb.firebaseio.com",
+  projectId: "wc2026-ee247",
+  storageBucket: "wc2026-ee247.firebasestorage.app",
+  messagingSenderId: "903288249180",
+  appId: "1:903288249180:web:81701ddb314f8686877f99"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ── FLAGS ────────────────────────────────────────────────────────────────────
 const ISO={
   "South Africa":"za","Canada":"ca","Brazil":"br","Japan":"jp",
   "Germany":"de","Paraguay":"py","Netherlands":"nl","Morocco":"ma",
@@ -224,452 +215,328 @@ const ISO={
   "Australia":"au","Egypt":"eg","Argentina":"ar","Cabo Verde":"cv",
 };
 function fl(t,w=15,h=11){
-  const c=ISO[t];
-  if(!c)return'';
+  const c=ISO[t];if(!c)return'';
   return`<img class="flag" src="https://flagcdn.com/w40/${c}.png" width="${w}" height="${h}" alt="${t}" onerror="this.style.display='none'">`;
 }
 
-// ── BRACKET STRUCTURE ────────────────────────────────────────────────────────
-// The bracket is split into LEFT half (matches 0-7) and RIGHT half (matches 8-15)
-// LEFT flows: R32-L → R16-L → QF-L → SF-L → [Final/Center] ← SF-R ← QF-R ← R16-R ← R32-R
-//
-// IMPORTANT: picks are stored as flat arrays per round.
-// R32: indices 0-15 (0-7 = left, 8-15 = right)
-// R16: indices 0-7  (0-3 = left, 4-7 = right)
-// QF:  indices 0-3  (0-1 = left, 2-3 = right)
-// SF:  indices 0-1  (0 = left, 1 = right)
-// Final: index 0 only — winner = Champion
-
-const R32_MATCHES = [
-  // LEFT HALF (indices 0-7)
-  {i:0, teams:["South Africa","Canada"], date:"Jun 28", time:"3pm ET", venue:"Los Angeles"},
-  {i:1, teams:["Brazil","Japan"],        date:"Jun 29", time:"1pm ET", venue:"Houston"},
-  {i:2, teams:["Germany","Paraguay"],    date:"Jun 29", time:"4:30pm ET", venue:"Boston"},
-  {i:3, teams:["Netherlands","Morocco"], date:"Jun 29", time:"9pm ET", venue:"Monterrey"},
-  {i:4, teams:["Côte d'Ivoire","Norway"],date:"Jun 30", time:"1pm ET", venue:"Dallas"},
-  {i:5, teams:["France","Sweden"],       date:"Jul 1",  time:"5pm ET", venue:"New Jersey"},
-  {i:6, teams:["Mexico","Ecuador"],      date:"Jul 1",  time:"9pm ET", venue:"Mexico City"},
-  {i:7, teams:["England","DR Congo"],    date:"Jul 2",  time:"12pm ET", venue:"Atlanta"},
-  // RIGHT HALF (indices 8-15)
-  {i:8,  teams:["Belgium","Senegal"],      date:"Jul 2",  time:"4pm ET",  venue:"Seattle"},
-  {i:9,  teams:["USA","Bosnia & Herz."],   date:"Jul 1",  time:"8pm ET",  venue:"Santa Clara"},
-  {i:10, teams:["Spain","Austria"],        date:"Jul 3",  time:"3pm ET",  venue:"Los Angeles"},
-  {i:11, teams:["Portugal","Croatia"],     date:"Jul 3",  time:"6pm ET",  venue:"Toronto"},
-  {i:12, teams:["Switzerland","Algeria"],  date:"Jul 2",  time:"3pm ET",  venue:"Las Vegas"},
-  {i:13, teams:["Colombia","Ghana"],       date:"Jul 4",  time:"4pm ET",  venue:"Kansas City"},
-  {i:14, teams:["Australia","Egypt"],      date:"Jul 4",  time:"8pm ET",  venue:"Dallas"},
-  {i:15, teams:["Argentina","Cabo Verde"], date:"Jul 3",  time:"6pm ET",  venue:"Miami"},
+// ── MATCH DATA ───────────────────────────────────────────────────────────────
+const R32_MATCHES=[
+  {i:0,teams:["South Africa","Canada"],date:"Jun 28",time:"3pm ET",venue:"Los Angeles"},
+  {i:1,teams:["Brazil","Japan"],date:"Jun 29",time:"1pm ET",venue:"Houston"},
+  {i:2,teams:["Germany","Paraguay"],date:"Jun 29",time:"4:30pm ET",venue:"Boston"},
+  {i:3,teams:["Netherlands","Morocco"],date:"Jun 29",time:"9pm ET",venue:"Monterrey"},
+  {i:4,teams:["Côte d'Ivoire","Norway"],date:"Jun 30",time:"1pm ET",venue:"Dallas"},
+  {i:5,teams:["France","Sweden"],date:"Jul 1",time:"5pm ET",venue:"New Jersey"},
+  {i:6,teams:["Mexico","Ecuador"],date:"Jul 1",time:"9pm ET",venue:"Mexico City"},
+  {i:7,teams:["England","DR Congo"],date:"Jul 2",time:"12pm ET",venue:"Atlanta"},
+  {i:8,teams:["Belgium","Senegal"],date:"Jul 2",time:"4pm ET",venue:"Seattle"},
+  {i:9,teams:["USA","Bosnia & Herz."],date:"Jul 1",time:"8pm ET",venue:"Santa Clara"},
+  {i:10,teams:["Spain","Austria"],date:"Jul 3",time:"3pm ET",venue:"Los Angeles"},
+  {i:11,teams:["Portugal","Croatia"],date:"Jul 3",time:"6pm ET",venue:"Toronto"},
+  {i:12,teams:["Switzerland","Algeria"],date:"Jul 2",time:"3pm ET",venue:"Las Vegas"},
+  {i:13,teams:["Colombia","Ghana"],date:"Jul 4",time:"4pm ET",venue:"Kansas City"},
+  {i:14,teams:["Australia","Egypt"],date:"Jul 4",time:"8pm ET",venue:"Dallas"},
+  {i:15,teams:["Argentina","Cabo Verde"],date:"Jul 3",time:"6pm ET",venue:"Miami"},
 ];
 
-// Round sizes: R32=16, R16=8, QF=4, SF=2, Final=1
-const ROUND_SIZES = {R32:16, R16:8, QF:4, SF:2, Final:1};
-const ROUNDS = ["R32","R16","QF","SF","Final"];
-const RLBL = {R32:"Round of 32",R16:"Round of 16",QF:"Quarter-Finals",SF:"Semi-Finals",Final:"Final"};
-const RABB = {R32:"R32",R16:"R16",QF:"QF",SF:"SF",Final:"Final"};
-const ROUND_DATES = {R16:"Jul 4-6",QF:"Jul 11",SF:"Jul 15",Final:"Jul 19"};
-const PTS = {R32:1,R16:2,QF:4,SF:8,Final:16,Champion:32};
-const ADMIN_PW = "worldcup2026";
+const ROUND_SIZES={R32:16,R16:8,QF:4,SF:2,Final:1};
+const ROUNDS=["R32","R16","QF","SF","Final"];
+const RLBL={R32:"Round of 32",R16:"Round of 16",QF:"Quarter-Finals",SF:"Semi-Finals",Final:"Final"};
+const RABB={R32:"R32",R16:"R16",QF:"QF",SF:"SF",Final:"Final"};
+const ROUND_DATES={R16:"Jul 4-6",QF:"Jul 11",SF:"Jul 15",Final:"Jul 19"};
+const PTS={R32:1,R16:2,QF:4,SF:8,Final:16,Champion:32};
+const ADMIN_PW="worldcup2026";
 
-// Locked results (hardcoded finished matches)
-// score format "winner_score-loser_score"
-const LOCKED = {
-  R32: {
-    0: {winner:"Canada", score:"1-0"}
-  }
-};
+const LOCKED={R32:{0:{winner:"Canada",score:"1-0"}}};
 
-// ── STATE ─────────────────────────────────────────────────────────────────────
-// picks[round][matchIndex] = teamName
-let picks = {R32:{}, R16:{}, QF:{}, SF:{}, Final:{}, Champion:null};
-let myName = "";
-let myLocked = false;
-let entries = [];
-let results = {R32:{}, R16:{}, QF:{}, SF:{}, Final:{}, Champion:null, scores:{}};
-let adminUnlocked = false;
+// ── STATE ────────────────────────────────────────────────────────────────────
+let picks={R32:{},R16:{},QF:{},SF:{},Final:{},Champion:null};
+let myName="";
+let myLocked=false;
+let entries={};   // {name: {picks, submittedAt}}
+let results={R32:{},R16:{},QF:{},SF:{},Final:{},Champion:null,scores:{}};
+let adminUnlocked=false;
 
-function applyLocked() {
-  for (const [rnd, map] of Object.entries(LOCKED)) {
-    for (const [i, data] of Object.entries(map)) {
-      results[rnd][+i] = data.winner;
-      if (data.score) results.scores[`${rnd}_${i}`] = data.score;
-      // Only set pick if user hasn't already picked something here
-      if (!picks[rnd][+i]) picks[rnd][+i] = data.winner;
+// ── FIREBASE ─────────────────────────────────────────────────────────────────
+function showSaving(on){document.getElementById('savingDot').style.display=on?'block':'none'}
+
+// Listen to all entries in real time
+onValue(ref(db,'entries'), snap=>{
+  entries = snap.val()||{};
+  if(document.getElementById('view-leaderboard').classList.contains('active')) renderLB();
+});
+
+// Listen to results in real time
+onValue(ref(db,'results'), snap=>{
+  const r=snap.val();
+  if(r){results=r;results.scores=results.scores||{};}
+  applyLocked();
+  renderBracket();
+  if(document.getElementById('view-leaderboard').classList.contains('active')) renderLB();
+});
+
+async function saveEntry(name,picksData){
+  showSaving(true);
+  try{
+    await set(ref(db,`entries/${name.replace(/[.#$[\]]/g,'_')}`),{name,picks:picksData,submittedAt:Date.now()});
+  }catch(e){console.error(e);}
+  showSaving(false);
+}
+
+async function saveResults(){
+  showSaving(true);
+  try{
+    await set(ref(db,'results'),results);
+  }catch(e){console.error(e);}
+  showSaving(false);
+  alert('Results saved!');
+}
+
+// ── LOGIC ────────────────────────────────────────────────────────────────────
+function applyLocked(){
+  for(const[rnd,map]of Object.entries(LOCKED)){
+    results[rnd]=results[rnd]||{};
+    results.scores=results.scores||{};
+    for(const[i,data]of Object.entries(map)){
+      results[rnd][+i]=data.winner;
+      if(data.score)results.scores[`${rnd}_${i}`]=data.score;
+      if(!picks[rnd][+i])picks[rnd][+i]=data.winner;
     }
   }
 }
 
-function load() {
-  try { const e=localStorage.getItem('wc26e'); if(e) entries=JSON.parse(e); } catch(e){}
-  try { const r=localStorage.getItem('wc26r'); if(r) { const p=JSON.parse(r); Object.assign(results,p); results.scores=results.scores||{}; } } catch(e){}
-  applyLocked();
+function getMatchTeams(round,idx){
+  if(round==="R32"){const m=R32_MATCHES[idx];return m?[...m.teams]:[null,null];}
+  const prev={R16:"R32",QF:"R16",SF:"QF",Final:"SF"}[round];
+  return[picks[prev][idx*2]||null,picks[prev][idx*2+1]||null];
 }
-function saveE() { try{localStorage.setItem('wc26e',JSON.stringify(entries))}catch(e){} }
-function saveR() { try{localStorage.setItem('wc26r',JSON.stringify(results))}catch(e){} }
 
-// ── BRACKET LOGIC ─────────────────────────────────────────────────────────────
-// Get the two teams for a match in a given round
-// matchIdx is the global index within that round (0-15 for R32, 0-7 for R16, etc.)
-function getMatchTeams(round, matchIdx) {
-  if (round === "R32") {
-    const m = R32_MATCHES[matchIdx];
-    return m ? [...m.teams] : [null, null];
+function isMatchLocked(rnd,idx){return!!LOCKED[rnd]?.[idx]}
+function getResult(rnd,idx){return results[rnd]?.[idx]||null}
+function getScore(rnd,idx){return results.scores?.[`${rnd}_${idx}`]||null}
+
+function cascadeClear(rnd,changedIdx){
+  const nextRound={R32:"R16",R16:"QF",QF:"SF",SF:"Final"}[rnd];
+  if(!nextRound)return;
+  const nextIdx=Math.floor(changedIdx/2);
+  const curPick=picks[nextRound][nextIdx];
+  if(!curPick)return;
+  // Check if curPick will still be a valid team in the next match
+  const[newA,newB]=getMatchTeams(nextRound,nextIdx);
+  if(curPick!==newA&&curPick!==newB){
+    delete picks[nextRound][nextIdx];
+    if(nextRound==='Final')picks.Champion=null;
+    cascadeClear(nextRound,nextIdx);
   }
-  // For later rounds, the teams are the winners of two previous matches
-  const prev = {R16:"R32", QF:"R16", SF:"QF", Final:"SF"}[round];
-  const prevA = matchIdx * 2;
-  const prevB = matchIdx * 2 + 1;
-  return [picks[prev][prevA] || null, picks[prev][prevB] || null];
 }
 
-function isMatchLocked(rnd, idx) { return !!LOCKED[rnd]?.[idx]; }
-function getResult(rnd, idx) { return results[rnd]?.[idx] || null; }
-function getScore(rnd, idx) { return results.scores?.[`${rnd}_${idx}`] || null; }
-
-// When user changes a pick, only clear downstream picks that depended on this match
-function setPick(rnd, idx, team) {
-  if (myLocked) return;
-  if (isMatchLocked(rnd, idx)) return;
-  if (!myName) { document.getElementById('nameInput').focus(); alert('Enter your name first!'); return; }
-
-  picks[rnd][idx] = team;
-
-  // Cascade: clear any downstream pick that had the OLD team from this match
-  // A pick at (round, idx) feeds into (nextRound, Math.floor(idx/2))
-  // We recursively clear only the chain that was affected
-  cascadeClear(rnd, idx, team);
-
-  if (rnd === 'Final') picks.Champion = team;
+function setPick(rnd,idx,team){
+  if(myLocked)return;
+  if(isMatchLocked(rnd,idx))return;
+  if(!myName){document.getElementById('nameInput').focus();alert('Enter your name first!');return;}
+  picks[rnd][idx]=team;
+  cascadeClear(rnd,idx);
+  if(rnd==='Final')picks.Champion=team;
   applyLocked();
   renderBracket();
 }
 
-function cascadeClear(rnd, changedIdx, newWinner) {
-  const nextRound = {R32:"R16", R16:"QF", QF:"SF", SF:"Final"}[rnd];
-  if (!nextRound) return;
-
-  const nextIdx = Math.floor(changedIdx / 2);
-  const [teamA, teamB] = getMatchTeams(nextRound, nextIdx);
-
-  // The current pick in the next round
-  const curPick = picks[nextRound][nextIdx];
-
-  // If the current pick is still a valid team (i.e. one of the two that would face off), keep it
-  // But recalculate what the match teams will be after this change
-  // After change: the slot that changedIdx feeds into is changedIdx%2==0 ? teamA : teamB
-  // The new teams for nextIdx match will be determined after picks update
-
-  // Simple rule: if the current pick in nextRound[nextIdx] won't be in that match anymore, clear it
-  // We need to figure out the new teams for that match
-  const newTeams = getUpdatedMatchTeams(rnd, changedIdx, newWinner, nextRound, nextIdx);
-
-  if (curPick && !newTeams.includes(curPick)) {
-    delete picks[nextRound][nextIdx];
-    if (nextRound === 'Final') picks.Champion = null;
-    cascadeClear(nextRound, nextIdx, null);
-  }
-}
-
-function getUpdatedMatchTeams(changedRnd, changedIdx, newWinner, targetRnd, targetIdx) {
-  // Simulate what the teams will be for targetRnd[targetIdx] after the change
-  const prevA = targetIdx * 2;
-  const prevB = targetIdx * 2 + 1;
-  const prev = {R16:"R32",QF:"R16",SF:"QF",Final:"SF"}[targetRnd];
-
-  const teamA = (prev === changedRnd && prevA === changedIdx) ? newWinner : (picks[prev][prevA] || null);
-  const teamB = (prev === changedRnd && prevB === changedIdx) ? newWinner : (picks[prev][prevB] || null);
-  return [teamA, teamB].filter(Boolean);
-}
-
-function countPicks() {
-  let t = 0;
-  ROUNDS.forEach(r => { for (let i=0; i<ROUND_SIZES[r]; i++) { if (picks[r][i]) t++; } });
-  if (picks.Champion) t++;
+function countPicks(){
+  let t=0;
+  ROUNDS.forEach(r=>{for(let i=0;i<ROUND_SIZES[r];i++){if(picks[r][i])t++;}});
   return t;
 }
-function totalPicksNeeded() {
-  // 16+8+4+2+1 = 31 matches + 1 champion = 32... but champion IS the final winner
-  // so just count all matches: 31, plus champion separately? 
-  // Actually champion = winner of Final, so total = 31 matches + confirm champion = Final winner
-  // Let's keep it simple: 31 match picks + 1 champion = 32... 
-  // Actually the Final pick IS the champion. So 31 total match picks.
-  return 31;
-}
-function allPicksDone() {
-  for (const r of ROUNDS) {
-    for (let i=0; i<ROUND_SIZES[r]; i++) {
-      if (!picks[r][i]) return false;
-    }
-  }
-  return true; // Champion is same as Final[0]
+function allPicksDone(){
+  for(const r of ROUNDS)for(let i=0;i<ROUND_SIZES[r];i++)if(!picks[r][i])return false;
+  return true;
 }
 
-function scoreEntry(entry) {
-  let t = 0;
-  ROUNDS.forEach(r => {
-    for (let i=0; i<ROUND_SIZES[r]; i++) {
-      const p = entry.picks[r]?.[i];
-      const res = results[r]?.[i];
-      if (p && res && p === res) t += PTS[r];
+function scoreEntry(entry){
+  let t=0;
+  ROUNDS.forEach(r=>{
+    for(let i=0;i<ROUND_SIZES[r];i++){
+      const p=entry.picks?.[r]?.[i];
+      const res=results[r]?.[i];
+      if(p&&res&&p===res)t+=PTS[r];
     }
   });
-  if (entry.picks.Champion && results.Champion && entry.picks.Champion === results.Champion) t += PTS.Champion;
+  const champ=entry.picks?.Champion||entry.picks?.Final?.[0];
+  if(champ&&results.Champion&&champ===results.Champion)t+=PTS.Champion;
   return t;
 }
 
 // ── TABS ─────────────────────────────────────────────────────────────────────
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['bracket','leaderboard','admin'][i]===tab));
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+window.switchTab=function(tab){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['bracket','leaderboard','admin'][i]===tab));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+tab).classList.add('active');
-  if (tab==='bracket') renderBracket();
-  if (tab==='leaderboard') renderLB();
-  if (tab==='admin') renderAdmin();
+  if(tab==='bracket')renderBracket();
+  if(tab==='leaderboard')renderLB();
+  if(tab==='admin')renderAdmin();
 }
 
-// ── BRACKET RENDER ────────────────────────────────────────────────────────────
-function renderBracket() {
-  const el = document.getElementById('bracketEl');
-  el.innerHTML = '';
-
-  // Left columns: R32(0-7), R16(0-3), QF(0-1), SF(0)
-  el.appendChild(makeHalfCol('R32', 0, 7, 'lc'));
-  el.appendChild(makeHalfCol('R16', 0, 3, 'lc'));
-  el.appendChild(makeHalfCol('QF',  0, 1, 'lc'));
-  el.appendChild(makeHalfCol('SF',  0, 0, 'lc'));
-
-  // Center
+// ── BRACKET ──────────────────────────────────────────────────────────────────
+function renderBracket(){
+  const el=document.getElementById('bracketEl');
+  el.innerHTML='';
+  el.appendChild(makeHalfCol('R32',0,7,'lc'));
+  el.appendChild(makeHalfCol('R16',0,3,'lc'));
+  el.appendChild(makeHalfCol('QF',0,1,'lc'));
+  el.appendChild(makeHalfCol('SF',0,0,'lc'));
   el.appendChild(makeCenter());
-
-  // Right columns: SF(1), QF(2-3), R16(4-7), R32(8-15)
-  el.appendChild(makeHalfCol('SF',  1, 1, 'rc'));
-  el.appendChild(makeHalfCol('QF',  2, 3, 'rc'));
-  el.appendChild(makeHalfCol('R16', 4, 7, 'rc'));
-  el.appendChild(makeHalfCol('R32', 8, 15,'rc'));
-
-  updateBar();
-  updateHint();
+  el.appendChild(makeHalfCol('SF',1,1,'rc'));
+  el.appendChild(makeHalfCol('QF',2,3,'rc'));
+  el.appendChild(makeHalfCol('R16',4,7,'rc'));
+  el.appendChild(makeHalfCol('R32',8,15,'rc'));
+  updateBar();updateHint();
 }
 
-function makeHalfCol(rnd, fromIdx, toIdx, side) {
-  const col = document.createElement('div');
-  col.className = `bc ${side}`;
-  const dateStr = rnd !== 'R32' ? (ROUND_DATES[rnd] ? ` · ${ROUND_DATES[rnd]}` : '') : '';
-  col.innerHTML = `<div class="bc-lbl">${RABB[rnd]}${dateStr}</div>`;
-
-  const matchCount = toIdx - fromIdx + 1;
-  const maxCount = 8; // R32 left/right each have 8
-  const unit = maxCount / matchCount; // spacing unit
-
-  for (let idx = fromIdx; idx <= toIdx; idx++) {
-    // spacer before
-    const sp1 = document.createElement('div');
-    sp1.className = 'bsp';
-    sp1.style.cssText = `flex:${unit*0.48};min-height:${unit*13}px`;
-    col.appendChild(sp1);
-
-    col.appendChild(makeMatch(rnd, idx));
-
-    // spacer after
-    const sp2 = document.createElement('div');
-    sp2.className = 'bsp';
-    sp2.style.cssText = `flex:${unit*0.48};min-height:${unit*13}px`;
-    col.appendChild(sp2);
+function makeHalfCol(rnd,fromIdx,toIdx,side){
+  const col=document.createElement('div');
+  col.className=`bc ${side}`;
+  const dateStr=rnd!=='R32'&&ROUND_DATES[rnd]?` · ${ROUND_DATES[rnd]}`:'';
+  col.innerHTML=`<div class="bc-lbl">${RABB[rnd]}${dateStr}</div>`;
+  const matchCount=toIdx-fromIdx+1;
+  const unit=8/matchCount;
+  for(let idx=fromIdx;idx<=toIdx;idx++){
+    const sp1=document.createElement('div');sp1.className='bsp';sp1.style.cssText=`flex:${unit*0.48};min-height:${unit*13}px`;col.appendChild(sp1);
+    col.appendChild(makeMatch(rnd,idx));
+    const sp2=document.createElement('div');sp2.className='bsp';sp2.style.cssText=`flex:${unit*0.48};min-height:${unit*13}px`;col.appendChild(sp2);
   }
-
   return col;
 }
 
-function makeMatch(rnd, idx) {
-  const [teamA, teamB] = getMatchTeams(rnd, idx);
-  const isLocked = isMatchLocked(rnd, idx);
-  const lockedWinner = isLocked ? LOCKED[rnd][idx].winner : null;
-  const result = getResult(rnd, idx);
-  const score = getScore(rnd, idx);
-  const hasResult = !!result;
-  const pick = picks[rnd][idx] || null;
+function makeMatch(rnd,idx){
+  const[teamA,teamB]=getMatchTeams(rnd,idx);
+  const locked=isMatchLocked(rnd,idx);
+  const lockedW=locked?LOCKED[rnd][idx].winner:null;
+  const result=getResult(rnd,idx);
+  const score=getScore(rnd,idx);
+  const hasResult=!!result;
+  const pick=picks[rnd][idx]||null;
 
-  const wrap = document.createElement('div');
-  wrap.className = 'bm';
-
-  // Meta label for R32
-  if (rnd === 'R32') {
-    const m = R32_MATCHES[idx];
-    if (m) {
-      const meta = document.createElement('div');
-      meta.className = 'bm-meta';
-      meta.textContent = `${m.date} · ${m.time} · ${m.venue}`;
-      wrap.appendChild(meta);
-    }
+  const wrap=document.createElement('div');wrap.className='bm';
+  if(rnd==='R32'){
+    const m=R32_MATCHES[idx];
+    if(m){const meta=document.createElement('div');meta.className='bm-meta';meta.textContent=`${m.date} · ${m.time} · ${m.venue}`;wrap.appendChild(meta);}
   }
+  const inner=document.createElement('div');inner.className='bm-inner';
 
-  const inner = document.createElement('div');
-  inner.className = 'bm-inner';
-
-  const teams = [teamA, teamB];
-  teams.forEach(team => {
-    const row = document.createElement('div');
-    if (!team) {
-      row.className = 'bt tbd';
-      row.innerHTML = '<span class="bn">TBD</span>';
-      inner.appendChild(row);
-      return;
-    }
-
-    const isPicked = pick === team;
-    const isCorrect = hasResult && isPicked && result === team;
-    const isWrong = hasResult && isPicked && result !== team;
-    const isLockedW = isLocked && team === lockedWinner;
-    const canClick = !isLocked && !hasResult && !myLocked;
-
-    let cls = 'bt';
-    if (isLockedW || isCorrect) cls += ' correct nop';
-    else if (isWrong) cls += ' wrong nop';
-    else if (isPicked) cls += ' picked';
-    if (isLocked || hasResult) cls += ' nop';
-
-    // Score display: show winner's score
-    let scoreStr = '';
-    if (score && hasResult) {
-      const parts = score.split('-');
-      if (parts.length === 2) {
-        scoreStr = result === team ? parts[0] : parts[1];
-      }
-    }
-
-    row.className = cls;
-    row.innerHTML = `${fl(team,15,11)}<span class="bn">${team}</span>${scoreStr?`<span class="bsc">${scoreStr}</span>`:''}`;
-    if (canClick) {
-      row.onclick = () => setPick(rnd, idx, team);
-    }
+  [teamA,teamB].forEach(team=>{
+    const row=document.createElement('div');
+    if(!team){row.className='bt tbd';row.innerHTML='<span class="bn">TBD</span>';inner.appendChild(row);return;}
+    const isPicked=pick===team;
+    const isCorrect=hasResult&&isPicked&&result===team;
+    const isWrong=hasResult&&isPicked&&result!==team;
+    const isLockedW2=locked&&team===lockedW;
+    const canClick=!locked&&!hasResult&&!myLocked;
+    let cls='bt';
+    if(isLockedW2||isCorrect)cls+=' correct nop';
+    else if(isWrong)cls+=' wrong nop';
+    else if(isPicked)cls+=' picked';
+    if(locked||hasResult)cls+=' nop';
+    let scoreStr='';
+    if(score&&hasResult){const p=score.split('-');if(p.length===2)scoreStr=result===team?p[0]:p[1];}
+    row.className=cls;
+    row.innerHTML=`${fl(team,15,11)}<span class="bn">${team}</span>${scoreStr?`<span class="bsc">${scoreStr}</span>`:''}`;
+    if(canClick)row.onclick=()=>setPick(rnd,idx,team);
     inner.appendChild(row);
-
-    // If wrong, show actual winner
-    if (isWrong && result) {
-      const act = document.createElement('div');
-      act.className = 'bt-actual';
-      act.innerHTML = `${fl(result,12,9)}<span style="margin-left:3px">→ ${result}</span>`;
-      inner.appendChild(act);
+    if(isWrong&&result){
+      const act=document.createElement('div');act.className='bt-actual';
+      act.innerHTML=`${fl(result,12,9)}<span style="margin-left:3px">→ ${result}</span>`;inner.appendChild(act);
     }
   });
 
-  wrap.appendChild(inner);
-  return wrap;
+  wrap.appendChild(inner);return wrap;
 }
 
-function makeCenter() {
-  const col = document.createElement('div');
-  col.className = 'bc-center';
+function makeCenter(){
+  const col=document.createElement('div');col.className='bc-center';
+  const f1=picks['SF'][0]||null;
+  const f2=picks['SF'][1]||null;
+  const finalPick=picks['Final'][0]||null;
+  col.innerHTML=`<div class="c-lbl">Final · Jul 19</div>`;
 
-  // SF winners feed into Final
-  // picks.SF[0] = left semifinal winner, picks.SF[1] = right semifinal winner
-  const f1 = picks['SF'][0] || null;
-  const f2 = picks['SF'][1] || null;
-  const finalPick = picks['Final'][0] || null;
-
-  col.innerHTML = `<div class="c-lbl">Final · Jul 19</div>`;
-
-  // Top finalist slot (left SF winner) — clickable if both SF done
-  const slot1 = document.createElement('div');
-  slot1.className = 'c-slot' + (!f1?' empty':'') + (finalPick===f1&&f1?' picked-final':'');
-  slot1.innerHTML = f1 ? `${fl(f1,16,12)}<span class="cs-name">${f1}</span>` : '<span>TBD</span>';
-  if (f1 && !myLocked) slot1.onclick = () => { picks['Final'][0] = f1; picks.Champion = f1; renderBracket(); };
+  const slot1=document.createElement('div');
+  slot1.className='c-slot'+((!f1)?' empty':'')+(finalPick===f1&&f1?' picked-final':'');
+  slot1.innerHTML=f1?`${fl(f1,16,12)}<span class="cs-name">${f1}</span>`:'<span>TBD</span>';
+  if(f1&&!myLocked)slot1.onclick=()=>{picks['Final'][0]=f1;picks.Champion=f1;renderBracket();};
   col.appendChild(slot1);
 
-  // Trophy
-  const trophy = document.createElement('div');
-  trophy.className = 'c-trophy';
-  trophy.textContent = '🏆';
-  col.appendChild(trophy);
+  const trophy=document.createElement('div');trophy.className='c-trophy';trophy.textContent='🏆';col.appendChild(trophy);
 
-  // Bottom finalist slot (right SF winner)
-  const slot2 = document.createElement('div');
-  slot2.className = 'c-slot' + (!f2?' empty':'') + (finalPick===f2&&f2?' picked-final':'');
-  slot2.innerHTML = f2 ? `${fl(f2,16,12)}<span class="cs-name">${f2}</span>` : '<span>TBD</span>';
-  if (f2 && !myLocked) slot2.onclick = () => { picks['Final'][0] = f2; picks.Champion = f2; renderBracket(); };
+  const slot2=document.createElement('div');
+  slot2.className='c-slot'+((!f2)?' empty':'')+(finalPick===f2&&f2?' picked-final':'');
+  slot2.innerHTML=f2?`${fl(f2,16,12)}<span class="cs-name">${f2}</span>`:'<span>TBD</span>';
+  if(f2&&!myLocked)slot2.onclick=()=>{picks['Final'][0]=f2;picks.Champion=f2;renderBracket();};
   col.appendChild(slot2);
 
-  // Champion display
-  if (finalPick) {
-    const champ = document.createElement('div');
-    champ.className = 'c-champ';
-    champ.innerHTML = `<div style="margin-top:5px">${fl(finalPick,20,15)}</div><div class="c-champ-name">${finalPick}</div><div class="c-champ-lbl">My Champion</div>`;
+  if(finalPick){
+    const champ=document.createElement('div');champ.className='c-champ';
+    champ.innerHTML=`<div style="margin-top:5px">${fl(finalPick,20,15)}</div><div class="c-champ-name">${finalPick}</div><div class="c-champ-lbl">My Champion</div>`;
     col.appendChild(champ);
   }
-
-  if (myName) {
-    const nameEl = document.createElement('div');
-    nameEl.className = 'c-user';
-    nameEl.textContent = myName;
-    col.appendChild(nameEl);
-  }
-
+  if(myName){const nu=document.createElement('div');nu.className='c-user';nu.textContent=myName;col.appendChild(nu);}
   return col;
 }
 
-function updateHint() {
-  const h = document.getElementById('bracketHint');
-  if (myLocked) { h.textContent='🔒 Picks locked — check back as results come in'; h.style.color='var(--green)'; return; }
-  if (!myName) { h.textContent='Enter your name above · tap teams to pick winners'; h.style.color=''; return; }
-  h.textContent='Tap teams to pick winners all the way to the champion'; h.style.color='';
+function updateHint(){
+  const h=document.getElementById('bracketHint');
+  if(myLocked){h.textContent='🔒 Picks locked — check back as results come in';h.style.color='var(--green)';return;}
+  if(!myName){h.textContent='Enter your name above · tap teams to pick winners';h.style.color='';return;}
+  h.textContent='Tap teams to pick winners all the way to the champion';h.style.color='';
 }
 
-function updateBar() {
-  const btn = document.getElementById('submitBtn');
-  const prog = document.getElementById('submitProg');
-  const bar = document.getElementById('submitBar');
-  if (myLocked) { bar.style.display='none'; return; }
+function updateBar(){
+  const btn=document.getElementById('submitBtn');
+  const prog=document.getElementById('submitProg');
+  const bar=document.getElementById('submitBar');
+  if(myLocked){bar.style.display='none';return;}
   bar.style.display='flex';
-  const done = countPicks();
-  const tot = totalPicksNeeded();
-  const ready = allPicksDone() && !!myName;
-  prog.textContent = `${done} / ${tot} picks`;
-  btn.disabled = !ready;
+  const done=countPicks();
+  prog.textContent=`${done} / 31 picks`;
+  btn.disabled=!allPicksDone()||!myName;
 }
 
 // ── NAME / SUBMIT ─────────────────────────────────────────────────────────────
-function onName(val) {
-  myName = val.trim();
-  const ex = entries.find(e => e.name.toLowerCase() === myName.toLowerCase());
-  if (ex && !myLocked) {
-    // Load their saved picks
-    picks = JSON.parse(JSON.stringify(ex.picks));
-    // Make sure picks use the right format (object, not array)
-    ROUNDS.forEach(r => { if (Array.isArray(picks[r])) { const obj={}; picks[r].forEach((v,i)=>{if(v)obj[i]=v;}); picks[r]=obj; } });
-    myLocked = true;
-    applyLocked();
-  } else if (!ex && myLocked) {
-    myLocked = false;
-    picks = {R32:{},R16:{},QF:{},SF:{},Final:{},Champion:null};
-    applyLocked();
+window.onName=function(val){
+  myName=val.trim();
+  const key=myName.replace(/[.#$[\]]/g,'_');
+  const ex=entries[key]||Object.values(entries).find(e=>e.name?.toLowerCase()===myName.toLowerCase());
+  if(ex&&!myLocked){
+    picks=JSON.parse(JSON.stringify(ex.picks||{}));
+    ROUNDS.forEach(r=>{picks[r]=picks[r]||{};});
+    picks.Champion=picks.Champion||null;
+    myLocked=true;applyLocked();
+  }else if(!ex&&myLocked){
+    myLocked=false;picks={R32:{},R16:{},QF:{},SF:{},Final:{},Champion:null};applyLocked();
   }
-  document.getElementById('lockBadge').style.display = myLocked ? 'inline-flex' : 'none';
-  document.getElementById('nameInput').disabled = myLocked;
+  document.getElementById('lockBadge').style.display=myLocked?'inline-flex':'none';
+  document.getElementById('nameInput').disabled=myLocked;
   renderBracket();
 }
 
-function doSubmit() {
-  if (!myName || !allPicksDone()) return;
-  const entry = { name: myName, picks: JSON.parse(JSON.stringify(picks)), submittedAt: Date.now() };
-  entries = [...entries.filter(e => e.name.toLowerCase() !== myName.toLowerCase()), entry];
-  myLocked = true;
-  saveE();
-  document.getElementById('lockBadge').style.display = 'inline-flex';
-  document.getElementById('nameInput').disabled = true;
-  document.getElementById('submitBar').style.display = 'none';
+window.doSubmit=async function(){
+  if(!myName||!allPicksDone())return;
+  await saveEntry(myName,JSON.parse(JSON.stringify({...picks})));
+  myLocked=true;
+  document.getElementById('lockBadge').style.display='inline-flex';
+  document.getElementById('nameInput').disabled=true;
+  document.getElementById('submitBar').style.display='none';
   document.getElementById('surprise').classList.add('show');
   renderBracket();
 }
 
 // ── LEADERBOARD ───────────────────────────────────────────────────────────────
-function renderLB() {
-  const el = document.getElementById('lbEl');
-  if (!entries.length) { el.innerHTML='<div class="lb-empty">No picks yet.<br>Share <strong>thomassacks.github.io/WC2026</strong></div>'; return; }
-  const board = [...entries].map(e => ({name:e.name, score:scoreEntry(e), champ:e.picks?.Champion||e.picks?.Final?.[0]||e.picks?.Final?.['0']})).sort((a,b)=>b.score-a.score);
+function renderLB(){
+  const el=document.getElementById('lbEl');
+  const list=Object.values(entries);
+  if(!list.length){el.innerHTML='<div class="lb-empty">No picks yet.<br>Share <strong>thomassacks.github.io/WC2026</strong><br>with your crew!</div>';return;}
+  const board=list.map(e=>({name:e.name,score:scoreEntry(e),champ:e.picks?.Champion||e.picks?.Final?.[0]})).sort((a,b)=>b.score-a.score);
   el.innerHTML='';
-  board.forEach((e,i) => {
-    const rc = i===0?'var(--gold)':i===1?'#999':i===2?'#cd7f32':'var(--chalk-d)';
-    const row = document.createElement('div');
-    row.className = 'lb-row'+(i===0?' top':'');
+  board.forEach((e,i)=>{
+    const rc=i===0?'var(--gold)':i===1?'#999':i===2?'#cd7f32':'var(--chalk-d)';
+    const row=document.createElement('div');row.className='lb-row'+(i===0?' top':'');
     row.innerHTML=`
       <div class="lb-rank" style="color:${rc}">${i+1}</div>
       <div class="lb-info">
@@ -682,61 +549,65 @@ function renderLB() {
 }
 
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
-function renderAdmin() {
-  const el = document.getElementById('adminEl');
-  if (!adminUnlocked) {
+window.renderAdmin=function(){
+  const el=document.getElementById('adminEl');
+  if(!adminUnlocked){
     el.innerHTML=`<div class="admin-box">
       <div style="font-size:11px;color:var(--chalk-d);margin-bottom:4px">Enter results + scores as matches finish.</div>
       <input class="admin-pw" type="password" id="apw" placeholder="Password…" onkeydown="if(event.key==='Enter')tryUnlock()">
       <button class="admin-unlock-btn" onclick="tryUnlock()">Unlock</button>
       <div style="font-size:9px;color:var(--chalk-d);margin-top:8px">Default: <code style="color:var(--gold)">worldcup2026</code></div>
-    </div>`; return;
+    </div>`;return;
   }
   el.innerHTML='<div style="font-size:10px;color:var(--chalk-d);margin-bottom:14px">Click winner · enter score (e.g. 2-1) · Save.</div>';
-  ROUNDS.forEach(rnd => {
-    const sec = document.createElement('div');
-    sec.innerHTML=`<div class="admin-rnd">${RLBL[rnd]}</div>`;
-    const grid = document.createElement('div'); grid.className='admin-grid';
-    for (let idx=0; idx<ROUND_SIZES[rnd]; idx++) {
-      const [a,b] = getMatchTeams(rnd, idx);
-      if (!a && !b) continue;
-      const w = getResult(rnd, idx);
-      const locked = isMatchLocked(rnd, idx);
-      const sc = getScore(rnd, idx)||'';
-      const card = document.createElement('div'); card.className='admin-card';
+  ROUNDS.forEach(rnd=>{
+    const sec=document.createElement('div');sec.innerHTML=`<div class="admin-rnd">${RLBL[rnd]}</div>`;
+    const grid=document.createElement('div');grid.className='admin-grid';
+    for(let idx=0;idx<ROUND_SIZES[rnd];idx++){
+      const[a,b]=getMatchTeams(rnd,idx);
+      if(!a&&!b)continue;
+      const w=getResult(rnd,idx);
+      const locked=isMatchLocked(rnd,idx);
+      const sc=getScore(rnd,idx)||'';
+      const card=document.createElement('div');card.className='admin-card';
       card.innerHTML=`<div class="admin-card-h">Match ${idx+1}${locked?' · LOCKED':''}</div>`;
-      [a,b].forEach(team => {
-        if (!team) return;
-        const row = document.createElement('div');
-        row.className='admin-team'+(w===team?' winner':'');
+      [a,b].forEach(team=>{
+        if(!team)return;
+        const row=document.createElement('div');row.className='admin-team'+(w===team?' winner':'');
         row.innerHTML=`${fl(team,13,9)}<span>${team}</span>${w===team?'<span style="margin-left:auto">✓</span>':''}`;
-        if (!locked) row.onclick=()=>{ results[rnd][idx]=team; if(rnd==='Final')results.Champion=team; renderAdmin(); };
+        if(!locked)row.onclick=()=>{results[rnd]=results[rnd]||{};results[rnd][idx]=team;if(rnd==='Final')results.Champion=team;renderAdmin();};
         card.appendChild(row);
       });
-      if (!locked) {
-        const sr = document.createElement('div'); sr.className='admin-score-row';
+      if(!locked){
+        const sr=document.createElement('div');sr.className='admin-score-row';
         sr.innerHTML=`<span class="admin-score-label">Score</span><input class="admin-score-input" id="sc_${rnd}_${idx}" value="${sc}" placeholder="2-1" maxlength="6">`;
         card.appendChild(sr);
-      } else {
-        const sl = document.createElement('div'); sl.style.cssText='padding:3px 8px 5px;font-size:9px;color:var(--green)';
-        sl.textContent=`Final: ${sc||'—'}`; card.appendChild(sl);
+      }else{
+        const sl=document.createElement('div');sl.style.cssText='padding:3px 8px 5px;font-size:9px;color:var(--green)';
+        sl.textContent=`Final: ${sc||'—'}`;card.appendChild(sl);
       }
       grid.appendChild(card);
     }
-    sec.appendChild(grid); el.appendChild(sec);
+    sec.appendChild(grid);el.appendChild(sec);
   });
-  const btn = document.createElement('button'); btn.className='admin-save'; btn.textContent='Save All Results';
-  btn.onclick=()=>{
+  const btn=document.createElement('button');btn.className='admin-save';btn.textContent='Save All Results';
+  btn.onclick=async()=>{
     results.scores=results.scores||{};
     ROUNDS.forEach(rnd=>{for(let i=0;i<ROUND_SIZES[rnd];i++){if(isMatchLocked(rnd,i))continue;const inp=document.getElementById(`sc_${rnd}_${i}`);if(inp&&inp.value.trim())results.scores[`${rnd}_${i}`]=inp.value.trim();}});
-    applyLocked(); saveR(); alert('Results saved!'); renderBracket();
+    applyLocked();
+    await saveResults();
+    renderBracket();
   };
   el.appendChild(btn);
 }
-function tryUnlock(){const pw=document.getElementById('apw')?.value;if(pw===ADMIN_PW){adminUnlocked=true;renderAdmin();}else alert('Wrong password');}
+
+window.tryUnlock=function(){
+  const pw=document.getElementById('apw')?.value;
+  if(pw===ADMIN_PW){adminUnlocked=true;renderAdmin();}else alert('Wrong password');
+}
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
-load();
+applyLocked();
 renderBracket();
 </script>
 </body>

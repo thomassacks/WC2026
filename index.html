@@ -274,7 +274,8 @@ const ISO={
 function fi(t,w=16,h=11){
   const c=ISO[t];
   if(!c)return`<span style="font-size:${w}px;line-height:1;flex-shrink:0">🏳️</span>`;
-  return`<img class="flag" src="https://flagcdn.com/w${w*2}/${c}.png" width="${w}" height="${h}" alt="${t}">`;
+  // Use flagpedia which works reliably cross-platform
+  return`<img class="flag" src="https://flagcdn.com/w40/${c}.png" width="${w}" height="${h}" alt="${t}" onerror="this.style.display='none'">`;
 }
 
 // ── MATCH SCHEDULE (R32) ─────────────────────────────────────────────────────
@@ -491,6 +492,7 @@ function makeBMatch(rnd,idx,a,b,globalMatchIdx){
     row.className=cls;
     // Show score next to winner
     const teamScore=score&&hasResult?(result===team?score.split('-')[0]:score.split('-')[1]):'';
+    row.dataset.rnd=rnd;row.dataset.idx=idx;row.dataset.team=team;
     row.innerHTML=`${fi(team,15,11)}<span class="bn">${team}</span>${teamScore?`<span class="bscore">${teamScore}</span>`:''}`;
     if(team&&!isLocked&&!hasResult&&!myLocked)row.onclick=()=>makePick(rnd,idx,team);
     inner.appendChild(row);
@@ -558,13 +560,14 @@ function updateBar(){
 function makePick(rnd,idx,team){
   if(myLocked)return;
   if(isLockedMatch(rnd,idx))return;
-  if(!myName){document.getElementById('nameInput').focus();return;}
+  if(!myName){document.getElementById('nameInput').focus();alert('Enter your name first!');return;}
   myPicks[rnd]=myPicks[rnd]||[];
   myPicks[rnd][idx]=team;
+  // Clear all downstream rounds
   const ri=ROUNDS.indexOf(rnd);
-  for(let i=ri+1;i<ROUNDS.length;i++)myPicks[ROUNDS[i]]=[];
+  for(let i=ri+1;i<ROUNDS.length;i++){ myPicks[ROUNDS[i]]=[]; }
   myPicks.Champion=null;
-  if(rnd==='Final')myPicks.Champion=team;
+  if(rnd==='Final') myPicks.Champion=team;
   applyLocked();
   renderBracket();
 }
@@ -689,6 +692,16 @@ function tryUnlock(){const pw=document.getElementById('apw')?.value;if(pw===ADMI
 // ── INIT ─────────────────────────────────────────────────────────────────────
 load();
 renderBracket();
+
+// Event delegation fallback for bracket clicks
+document.getElementById('bracketEl').addEventListener('click', function(e){
+  const row = e.target.closest('.bt');
+  if(!row||row.classList.contains('tbd')||row.classList.contains('no-pick')) return;
+  const rnd = row.dataset.rnd;
+  const idx = parseInt(row.dataset.idx);
+  const team = row.dataset.team;
+  if(rnd&&!isNaN(idx)&&team) makePick(rnd, idx, team);
+});
 </script>
 </body>
 </html>

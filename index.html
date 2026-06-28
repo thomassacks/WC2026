@@ -3,595 +3,691 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 World Cup Bracket Challenge</title>
+<title>WC2026 Bracket Challenge</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#0a120d;--ink-m:#132018;--ink-l:#1c2e22;
-  --gold:#c9a84c;--gold-l:#e8c76a;--gold-dim:rgba(201,168,76,0.15);
-  --chalk:#f0ece0;--chalk-d:#8a9e88;
-  --green:#2ecc71;--red:#e74c3c;--blue:#3498db;
+  --bg:#0d0d0d;--bg2:#141414;--bg3:#1c1c1c;--bg4:#232323;
+  --gold:#c9a84c;--gold-l:#e8c76a;
+  --chalk:#dedede;--chalk-d:#5a5a5a;--chalk-m:#999;
+  --green:#27ae60;--green-bg:rgba(39,174,96,0.13);--green-border:rgba(39,174,96,0.5);
+  --red:#e74c3c;--red-bg:rgba(231,76,60,0.1);
+  --border:rgba(255,255,255,0.07);
+  --line:rgba(201,168,76,0.2);
 }
-html{background:var(--ink);color:var(--chalk);font-family:'Inter',sans-serif}
-body{min-height:100vh;padding-bottom:60px}
-button{cursor:pointer;font-family:'Inter',sans-serif;border:none;outline:none}
-input{font-family:'Inter',sans-serif;outline:none}
+html,body{background:var(--bg);color:var(--chalk);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+button,input{font-family:'Inter',sans-serif;border:none;outline:none;background:none}
+button{cursor:pointer}
+img.flag{border-radius:1px;object-fit:cover;display:inline-block;vertical-align:middle;flex-shrink:0}
 
-/* ── HEADER ── */
-.header{background:var(--ink);border-bottom:2px solid var(--gold);padding:18px 20px 14px;text-align:center;position:relative}
-.header-eyebrow{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:5px;color:var(--gold);margin-bottom:2px}
-.header-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,7vw,54px);letter-spacing:2px;line-height:1}
-.header-sub{font-size:11px;color:var(--chalk-d);margin-top:5px;letter-spacing:0.5px}
+/* HEADER */
+.hdr{background:#080808;border-bottom:2px solid var(--gold);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;gap:10px;flex-wrap:wrap}
+.hdr-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:var(--gold);line-height:1}
+.hdr-sub{font-size:8px;letter-spacing:2px;color:var(--chalk-d);text-transform:uppercase}
+.hdr-name-wrap{display:flex;align-items:center;gap:7px}
+.hdr-name-label{font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;font-family:'Oswald',sans-serif;white-space:nowrap}
+.hdr-name-input{background:transparent;border-bottom:1px solid rgba(201,168,76,0.35);color:var(--chalk);font-size:13px;padding:2px 5px;width:100px}
+.hdr-name-input::placeholder{color:rgba(255,255,255,0.18)}
+.hdr-name-input:disabled{color:var(--chalk-d);cursor:not-allowed;border-color:rgba(201,168,76,0.1)}
+.lock-badge{font-size:9px;color:var(--green);background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.25);border-radius:3px;padding:3px 7px;white-space:nowrap}
 
-/* ── TABS ── */
-.tabs{display:flex;background:var(--ink-m);border-bottom:1px solid rgba(201,168,76,0.12)}
-.tab{flex:1;padding:12px 8px;font-size:12px;font-weight:600;letter-spacing:0.5px;text-align:center;color:var(--chalk-d);background:transparent;border-bottom:2px solid transparent;transition:all 0.15s}
+/* TABS */
+.tabs{display:flex;background:#060606;border-bottom:1px solid var(--border)}
+.tab{flex:1;padding:9px 4px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:1.5px;text-align:center;color:var(--chalk-d);background:transparent;border-bottom:2px solid transparent;transition:all 0.15s;text-transform:uppercase}
 .tab.active{color:var(--gold);border-bottom-color:var(--gold)}
 
-/* ── VIEWS ── */
-.view{display:none;animation:fadeIn 0.2s ease}
-.view.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* VIEWS */
+.view{display:none}
+.view.active{display:block;animation:fi 0.18s ease}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 
-/* ── BRACKET VIEW ── */
-.bracket-outer{overflow-x:auto;padding:20px 12px;-webkit-overflow-scrolling:touch}
-.bracket{display:flex;gap:0;align-items:flex-start;min-width:820px}
-.b-col{display:flex;flex-direction:column;flex:1;min-width:130px}
-.b-col-label{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2.5px;color:var(--gold);text-align:center;padding:6px 4px 8px;border-bottom:1px solid var(--gold-dim);margin-bottom:6px}
-.b-matches{display:flex;flex-direction:column;flex:1;gap:0}
-.b-spacer{flex:1}
+/* ══════════════════════════════════
+   BRACKET
+══════════════════════════════════ */
+.bracket-wrap{overflow-x:auto;padding:10px 0 60px;-webkit-overflow-scrolling:touch}
+.bracket-hint{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:3px;color:var(--chalk-d);text-align:center;padding:8px;text-transform:uppercase}
 
-/* Match card in bracket */
-.b-match{margin:0 4px;position:relative}
-.b-match-inner{background:var(--ink-m);border:1px solid rgba(201,168,76,0.18);border-radius:5px;overflow:hidden;transition:border-color 0.15s}
-.b-match-inner:hover{border-color:rgba(201,168,76,0.4)}
-.b-team{display:flex;align-items:center;gap:6px;padding:7px 9px;font-size:11px;font-weight:500;cursor:pointer;transition:all 0.12s;border-bottom:1px solid rgba(255,255,255,0.04);position:relative;user-select:none}
-.b-team:last-child{border-bottom:none}
-.b-team:hover{background:rgba(201,168,76,0.08)}
-.b-team.picked{background:var(--gold);color:var(--ink);font-weight:700}
-.b-team.tbd{color:var(--chalk-d);opacity:0.45;cursor:default}
-.b-team.tbd:hover{background:none}
-.b-team .b-flag{font-size:14px;line-height:1;width:18px;text-align:center;flex-shrink:0}
-.b-team .b-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.b-team .b-check{font-size:9px;opacity:0.8}
+/* Grid: 4 left cols + center + 4 right cols */
+.bracket{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(148px,1fr)) 108px repeat(4,minmax(148px,1fr));
+  min-width:1050px;max-width:1400px;
+  margin:0 auto;
+  padding:0 8px;
+}
 
-/* connector lines */
-.b-connector{position:absolute;right:-4px;top:50%;width:4px;height:1px;background:rgba(201,168,76,0.25);z-index:1}
+/* column */
+.bc{display:flex;flex-direction:column}
+.bc-lbl{
+  font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-align:center;padding:3px 2px 6px;
+  border-bottom:1px solid rgba(201,168,76,0.12);
+  margin-bottom:4px;text-transform:uppercase;
+}
 
-/* champion column */
-.b-champ-col{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:100px;padding:0 8px}
-.b-champ-label{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
-.b-champ-box{background:linear-gradient(135deg,#1a3a20,#0f1a14);border:1.5px solid var(--gold);border-radius:8px;padding:14px 12px;text-align:center;min-width:90px}
-.b-champ-flag{font-size:28px;display:block;margin-bottom:4px}
-.b-champ-name{font-size:10px;font-weight:700;color:var(--gold-l)}
-.b-champ-trophy{font-size:20px;display:block;margin-bottom:4px;opacity:0.4}
+/* match wrapper — handles connector lines via pseudo */
+.bm-wrap{
+  display:flex;align-items:center;
+  position:relative;
+}
+/* left side: line goes right */
+.bc.left-col .bm-wrap::after{
+  content:'';position:absolute;right:-12px;top:50%;
+  width:12px;height:1px;background:var(--line);
+}
+/* right side: line goes left */
+.bc.right-col .bm-wrap::before{
+  content:'';position:absolute;left:-12px;top:50%;
+  width:12px;height:1px;background:var(--line);
+}
 
-/* ── PICKS PAGE ── */
-.picks-page{max-width:500px;margin:0 auto;padding:20px 14px 40px}
-.picks-name-row{display:flex;align-items:center;gap:10px;background:var(--ink-m);border:1px solid var(--gold-dim);border-radius:6px;padding:12px 14px;margin-bottom:20px}
-.picks-name-label{font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;white-space:nowrap}
-.picks-name-input{background:transparent;border:none;border-bottom:1px solid rgba(201,168,76,0.4);color:var(--chalk);font-size:15px;padding:3px 6px;flex:1;min-width:120px}
-.picks-name-input::placeholder{color:rgba(240,236,224,0.25)}
+.bm{flex:1;margin:2px 3px}
 
-.round-label{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gold-dim)}
-.pick-match{background:var(--ink-m);border:1px solid rgba(201,168,76,0.14);border-radius:6px;overflow:hidden;margin-bottom:8px}
-.pick-match-head{background:var(--ink);padding:4px 12px;display:flex;justify-content:space-between}
-.pick-match-num{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:var(--gold)}
-.pick-match-pts{font-size:9px;color:var(--chalk-d)}
-.pick-team{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;transition:background 0.12s;border-bottom:1px solid rgba(255,255,255,0.04)}
-.pick-team:last-child{border-bottom:none}
-.pick-team:hover{background:rgba(201,168,76,0.07)}
-.pick-team.picked{background:var(--gold);color:var(--ink)}
-.pick-team.tbd{opacity:0.3;cursor:not-allowed}
-.pick-team .pt-radio{width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(201,168,76,0.4);flex-shrink:0;transition:all 0.12s;display:flex;align-items:center;justify-content:center}
-.pick-team.picked .pt-radio{background:var(--ink);border-color:var(--ink)}
-.pick-team.picked .pt-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);display:block}
-.pick-team .pt-flag{font-size:18px}
-.pick-team .pt-name{flex:1;font-size:13px;font-weight:500}
-.pick-team.picked .pt-name{font-weight:700}
+/* date/venue label above match */
+.bm-meta{
+  font-size:8.5px;color:var(--chalk-d);
+  padding:0 6px 2px;
+  font-family:'Oswald',sans-serif;letter-spacing:0.5px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 
-.submit-btn{width:100%;margin-top:24px;background:var(--gold);color:var(--ink);font-weight:700;font-size:15px;padding:14px;border-radius:5px;letter-spacing:0.5px;transition:background 0.15s}
-.submit-btn:disabled{background:rgba(201,168,76,0.25);color:var(--chalk-d);cursor:not-allowed}
+.bm-inner{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:3px;overflow:hidden;transition:border-color 0.1s;
+}
+.bm-inner:hover .bt:not(.tbd):not(.no-pick){border-left-color:rgba(201,168,76,0.3)}
+
+/* team row */
+.bt{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 7px;
+  font-size:10px;font-weight:500;
+  cursor:pointer;transition:background 0.08s;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  border-left:2px solid transparent;
+  min-height:26px;user-select:none;
+}
+.bt:last-child{border-bottom:none}
+.bt:hover:not(.tbd):not(.no-pick){background:rgba(201,168,76,0.08);border-left-color:rgba(201,168,76,0.4)}
+.bt.tbd{color:var(--chalk-d);opacity:0.3;cursor:default;font-style:italic}
+.bt.no-pick{cursor:default}
+.bt .bn{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.2px}
+.bt .bscore{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;margin-left:4px;flex-shrink:0;min-width:14px;text-align:right}
+
+/* pick / result states */
+.bt.picked{background:rgba(201,168,76,0.1);border-left-color:var(--gold)}
+.bt.picked .bn{color:var(--gold-l);font-weight:600}
+.bt.picked .bscore{color:var(--gold-l)}
+
+.bt.correct{background:var(--green-bg);border-left-color:var(--green)}
+.bt.correct .bn{color:#2ecc71;font-weight:700}
+.bt.correct .bscore{color:#2ecc71}
+
+.bt.wrong{background:var(--red-bg);border-left-color:var(--red);opacity:0.55}
+.bt.wrong .bn{color:var(--red);text-decoration:line-through}
+
+/* actual winner row shown below a wrong pick */
+.bt-actual{
+  display:flex;align-items:center;gap:5px;
+  padding:3px 7px 4px 9px;
+  font-size:9px;color:var(--green);
+  background:rgba(39,174,96,0.06);
+  border-bottom:1px solid rgba(255,255,255,0.03);
+}
+
+/* locked match (played) border tint */
+.bm.match-played .bm-inner{border-color:rgba(39,174,96,0.15)}
+
+/* center */
+.bc-center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 4px;gap:6px}
+.c-lbl{font-family:'Oswald',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-align:center;text-transform:uppercase}
+.c-trophy{font-size:44px;filter:drop-shadow(0 0 16px rgba(201,168,76,0.8));animation:glow 2.5s ease-in-out infinite alternate;line-height:1;margin:4px 0}
+@keyframes glow{from{filter:drop-shadow(0 0 8px rgba(201,168,76,0.3))}to{filter:drop-shadow(0 0 28px rgba(201,168,76,0.95))}}
+.c-slot{background:var(--bg3);border:1px solid rgba(201,168,76,0.2);border-radius:3px;padding:5px 8px;width:100%;display:flex;align-items:center;gap:6px;font-size:10px;min-height:28px}
+.c-slot.empty{color:var(--chalk-d);font-style:italic;font-size:9px;opacity:0.35;justify-content:center}
+.c-slot .cs-name{font-weight:600;font-size:10px}
+.c-champ{text-align:center;margin-top:4px}
+.c-champ-name{font-size:10px;font-weight:700;color:var(--gold-l);margin-top:3px}
+.c-champ-lbl{font-size:7px;letter-spacing:2px;color:var(--chalk-d);font-family:'Oswald',sans-serif;margin-top:1px;text-transform:uppercase}
+
+/* submit bar */
+.submit-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(0deg,rgba(6,6,6,0.98) 70%,transparent);padding:12px 20px 12px;display:flex;align-items:center;justify-content:center;gap:10px;z-index:100;pointer-events:none}
+.submit-bar *{pointer-events:auto}
+.submit-btn{background:var(--gold);color:#111;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;padding:10px 28px;border-radius:3px;text-transform:uppercase;transition:background 0.15s}
+.submit-btn:disabled{background:rgba(201,168,76,0.2);color:rgba(255,255,255,0.25);cursor:not-allowed}
 .submit-btn:not(:disabled):hover{background:var(--gold-l)}
+.submit-prog{font-size:10px;color:var(--chalk-d);font-family:'Oswald',sans-serif;letter-spacing:1px}
 
-.locked-banner{background:rgba(15,50,25,0.8);border:1px solid rgba(46,204,113,0.3);border-radius:6px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.locked-banner-icon{font-size:18px}
-.locked-banner-text{font-size:12px;color:var(--green);font-weight:600}
-.locked-banner-sub{font-size:11px;color:var(--chalk-d);margin-top:1px}
-
-/* ── LEADERBOARD ── */
-.lb-page{max-width:600px;margin:0 auto;padding:20px 14px 40px}
-.lb-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin-bottom:4px}
-.lb-sub{font-size:11px;color:var(--chalk-d);margin-bottom:18px}
-.lb-empty{text-align:center;color:var(--chalk-d);margin-top:60px;font-size:14px}
-.lb-row{display:flex;align-items:center;gap:12px;background:var(--ink-m);border:1px solid rgba(255,255,255,0.05);border-radius:6px;padding:12px 16px;margin-bottom:7px;transition:border-color 0.15s}
-.lb-row.first{border-color:var(--gold);background:linear-gradient(90deg,rgba(201,168,76,0.08),transparent)}
-.lb-rank{font-family:'Bebas Neue',sans-serif;font-size:20px;width:26px;text-align:center;flex-shrink:0}
+/* LEADERBOARD */
+.page{max-width:560px;margin:0 auto;padding:18px 14px 60px}
+.ph{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;margin-bottom:4px}
+.psub{font-size:10px;color:var(--chalk-d);margin-bottom:18px}
+.lb-empty{text-align:center;color:var(--chalk-d);margin-top:60px;font-size:13px;line-height:2}
+.lb-row{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:11px 14px;margin-bottom:6px}
+.lb-row.top{border-color:var(--gold);background:linear-gradient(90deg,rgba(201,168,76,0.06),transparent)}
+.lb-rank{font-family:'Bebas Neue',sans-serif;font-size:20px;width:22px;text-align:center;flex-shrink:0}
 .lb-info{flex:1;min-width:0}
-.lb-name{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb-champ{font-size:11px;color:var(--chalk-d);margin-top:2px}
-.lb-score{font-family:'Bebas Neue',sans-serif;font-size:26px}
-.lb-pts{font-size:11px;font-family:'Inter',sans-serif;color:var(--chalk-d);margin-left:2px}
-.lb-lock{font-size:10px;color:var(--chalk-d);margin-left:4px}
+.lb-name{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-champ{font-size:10px;color:var(--chalk-d);margin-top:2px;display:flex;align-items:center;gap:4px}
+.lb-score{font-family:'Bebas Neue',sans-serif;font-size:26px;text-align:right}
+.lb-pts{font-size:9px;color:var(--chalk-d)}
 
-/* ── ADMIN ── */
-.admin-page{max-width:700px;margin:0 auto;padding:20px 14px 40px}
-.admin-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;margin-bottom:4px}
-.admin-unlock{background:var(--ink-m);border:1px solid var(--gold-dim);border-radius:6px;padding:20px;max-width:320px}
-.admin-pw-input{width:100%;background:var(--ink);border:1px solid rgba(201,168,76,0.25);border-radius:4px;color:var(--chalk);font-size:14px;padding:9px 12px;margin:10px 0}
-.admin-unlock-btn{width:100%;background:var(--gold);color:var(--ink);font-weight:700;font-size:14px;padding:10px;border-radius:4px}
-.admin-round-label{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gold);margin:18px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--gold-dim)}
-.admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
-.admin-match{background:var(--ink-m);border:1px solid rgba(255,255,255,0.06);border-radius:5px;overflow:hidden}
-.admin-match-head{background:var(--ink);padding:4px 10px;font-size:10px;color:var(--chalk-d);letter-spacing:1px}
-.admin-team{display:flex;align-items:center;gap:7px;padding:8px 10px;font-size:12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.12s}
+/* ADMIN */
+.admin-box{background:var(--bg2);border:1px solid rgba(201,168,76,0.18);border-radius:5px;padding:18px;max-width:280px}
+.admin-pw{width:100%;background:var(--bg);border:1px solid rgba(201,168,76,0.18);border-radius:3px;color:var(--chalk);font-size:13px;padding:8px 10px;margin:9px 0}
+.admin-unlock-btn{width:100%;background:var(--gold);color:#111;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;padding:9px;border-radius:3px}
+.admin-rnd{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;color:var(--gold);margin:16px 0 7px;padding-bottom:5px;border-bottom:1px solid rgba(201,168,76,0.1);text-transform:uppercase}
+.admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px}
+.admin-card{background:var(--bg2);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.admin-card-h{background:var(--bg);padding:3px 8px;font-size:8.5px;letter-spacing:1px;color:var(--chalk-d);font-family:'Oswald',sans-serif}
+.admin-team{display:flex;align-items:center;gap:6px;padding:6px 8px;font-size:11px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.1s}
 .admin-team:last-child{border-bottom:none}
 .admin-team:hover{background:rgba(255,255,255,0.04)}
-.admin-team.winner{background:rgba(46,204,113,0.15);color:var(--green);font-weight:700}
-.admin-save-btn{margin-top:18px;background:var(--gold);color:var(--ink);font-weight:700;font-size:14px;padding:11px 28px;border-radius:4px}
+.admin-team.winner{background:rgba(39,174,96,0.1);color:var(--green);font-weight:700}
+.admin-score-row{display:flex;gap:6px;padding:4px 8px 6px;align-items:center}
+.admin-score-input{width:36px;background:var(--bg);border:1px solid rgba(255,255,255,0.1);border-radius:3px;color:var(--chalk);font-size:12px;padding:3px 6px;text-align:center}
+.admin-score-label{font-size:9px;color:var(--chalk-d);flex:1}
+.admin-save{margin-top:16px;background:var(--gold);color:#111;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;padding:10px 24px;border-radius:3px}
 
-/* ── SURPRISE OVERLAY ── */
-.surprise-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px}
-.surprise-overlay.show{display:flex;animation:fadeIn 0.3s ease}
-.surprise-gif{width:240px;border-radius:8px;border:2px solid var(--red);box-shadow:0 0 30px rgba(231,76,60,0.4)}
-.surprise-msg{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--green)}
-.surprise-sub{font-size:12px;color:var(--chalk-d);text-align:center}
-.surprise-close{margin-top:8px;background:var(--gold);color:var(--ink);font-weight:700;padding:10px 28px;border-radius:4px;font-size:13px}
+/* SURPRISE */
+.surprise{position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;text-align:center}
+.surprise.show{display:flex;animation:fi 0.3s ease}
+.surprise-gif{width:min(260px,78vw);border-radius:5px;border:2px solid var(--red);box-shadow:0 0 40px rgba(231,76,60,0.4)}
+.surprise-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:var(--green)}
+.surprise-sub{font-size:11px;color:var(--chalk-d);max-width:240px}
+.surprise-close{background:var(--gold);color:#111;font-family:'Oswald',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;padding:9px 28px;border-radius:3px;margin-top:2px}
 
-/* scrollbar */
-.bracket-outer::-webkit-scrollbar{height:4px}
-.bracket-outer::-webkit-scrollbar-track{background:var(--ink)}
-.bracket-outer::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.3);border-radius:2px}
+::-webkit-scrollbar{height:3px;width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.2);border-radius:2px}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-eyebrow">FIFA World Cup 2026™</div>
-  <div class="header-title">Bracket Challenge</div>
-  <div class="header-sub">Pick your winners · Lock in · Check the board</div>
+<div class="hdr">
+  <div>
+    <div class="hdr-logo">WC2026</div>
+    <div class="hdr-sub">Bracket Challenge</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <div class="hdr-name-wrap">
+      <label class="hdr-name-label">Name</label>
+      <input class="hdr-name-input" id="nameInput" type="text" placeholder="Your name…" oninput="onName(this.value)">
+    </div>
+    <div id="lockBadge" class="lock-badge" style="display:none">🔒 Locked</div>
+  </div>
 </div>
 
 <div class="tabs">
   <button class="tab active" onclick="switchTab('bracket')">🗂 Bracket</button>
-  <button class="tab" onclick="switchTab('picks')">✏️ My Picks</button>
   <button class="tab" onclick="switchTab('leaderboard')">🏆 Leaderboard</button>
   <button class="tab" onclick="switchTab('admin')">⚙️ Admin</button>
 </div>
 
-<!-- BRACKET TAB -->
 <div id="view-bracket" class="view active">
-  <div class="bracket-outer">
+  <div class="bracket-wrap">
+    <div class="bracket-hint" id="bracketHint">Enter your name · tap teams to pick winners · submit to lock in</div>
     <div class="bracket" id="bracketEl"></div>
   </div>
-</div>
-
-<!-- PICKS TAB -->
-<div id="view-picks" class="view">
-  <div class="picks-page">
-    <div class="picks-name-row">
-      <label class="picks-name-label">Name</label>
-      <input class="picks-name-input" id="nameInput" type="text" placeholder="Your name…" oninput="onNameInput(this.value)">
-    </div>
-    <div id="lockedBanner" style="display:none" class="locked-banner">
-      <span class="locked-banner-icon">🔒</span>
-      <div>
-        <div class="locked-banner-text">Picks locked in</div>
-        <div class="locked-banner-sub">You can view but not change your selections</div>
-      </div>
-    </div>
-    <div id="picksContent"></div>
+  <div class="submit-bar" id="submitBar">
+    <span class="submit-prog" id="submitProg"></span>
+    <button class="submit-btn" id="submitBtn" onclick="submitPicks()" disabled>Lock In Picks</button>
   </div>
 </div>
 
-<!-- LEADERBOARD TAB -->
 <div id="view-leaderboard" class="view">
-  <div class="lb-page">
-    <div class="lb-title">Standings</div>
-    <div class="lb-sub">Points: R32=1 · R16=2 · QF=4 · SF=8 · Final=16 · Champion=32</div>
-    <div id="lbContent"></div>
+  <div class="page">
+    <div class="ph">Standings</div>
+    <div class="psub">R32=1pt · R16=2 · QF=4 · SF=8 · Final=16 · Champion=32</div>
+    <div id="lbEl"></div>
   </div>
 </div>
 
-<!-- ADMIN TAB -->
 <div id="view-admin" class="view">
-  <div class="admin-page">
-    <div class="admin-title">Enter Results</div>
-    <div id="adminContent"></div>
+  <div class="page">
+    <div class="ph">Results</div>
+    <div id="adminEl"></div>
   </div>
 </div>
 
-<!-- SURPRISE OVERLAY -->
-<div class="surprise-overlay" id="surpriseOverlay">
-  <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;color:var(--chalk-d)">Picks locked 🔒</div>
+<div class="surprise" id="surprise">
+  <div style="font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:3px;color:var(--chalk-d)">PICKS LOCKED 🔒</div>
   <img src="gabriel-arsenal.gif" class="surprise-gif" alt="">
-  <div class="surprise-msg">SENT OFF. NO CHANGES.</div>
-  <div class="surprise-sub">Good luck... you'll need it</div>
-  <button class="surprise-close" onclick="closeSuprise()">Close</button>
+  <div class="surprise-title">SENT OFF. NO CHANGES.</div>
+  <div class="surprise-sub">Your bracket is locked. Check back as results come in.</div>
+  <button class="surprise-close" onclick="closeSurprise()">Close</button>
 </div>
 
 <script>
-// ── DATA ─────────────────────────────────────────────────────────────────────
-const FLAGS = {
-  "South Africa":"🇿🇦","Canada":"🇨🇦","Brazil":"🇧🇷","Japan":"🇯🇵",
-  "Germany":"🇩🇪","Paraguay":"🇵🇾","Netherlands":"🇳🇱","Morocco":"🇲🇦",
-  "Côte d'Ivoire":"🇨🇮","Norway":"🇳🇴","France":"🇫🇷","Sweden":"🇸🇪",
-  "Mexico":"🇲🇽","Ecuador":"🇪🇨","England":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","DR Congo":"🇨🇩",
-  "Belgium":"🇧🇪","Senegal":"🇸🇳","USA":"🇺🇸","Bosnia & Herz.":"🇧🇦",
-  "Spain":"🇪🇸","Austria":"🇦🇹","Portugal":"🇵🇹","Croatia":"🇭🇷",
-  "Switzerland":"🇨🇭","Algeria":"🇩🇿","Colombia":"🇨🇴","Ghana":"🇬🇭",
-  "Australia":"🇦🇺","Egypt":"🇪🇬","Argentina":"🇦🇷","Cabo Verde":"🇨🇻",
+// ── FLAGS ─────────────────────────────────────────────────────────────────────
+const ISO={
+  "South Africa":"za","Canada":"ca","Brazil":"br","Japan":"jp",
+  "Germany":"de","Paraguay":"py","Netherlands":"nl","Morocco":"ma",
+  "Côte d'Ivoire":"ci","Norway":"no","France":"fr","Sweden":"se",
+  "Mexico":"mx","Ecuador":"ec","England":"gb-eng","DR Congo":"cd",
+  "Belgium":"be","Senegal":"sn","USA":"us","Bosnia & Herz.":"ba",
+  "Spain":"es","Austria":"at","Portugal":"pt","Croatia":"hr",
+  "Switzerland":"ch","Algeria":"dz","Colombia":"co","Ghana":"gh",
+  "Australia":"au","Egypt":"eg","Argentina":"ar","Cabo Verde":"cv",
 };
-const f = t => FLAGS[t] || "🏳️";
+function fi(t,w=16,h=11){
+  const c=ISO[t];
+  if(!c)return`<span style="font-size:${w}px;line-height:1;flex-shrink:0">🏳️</span>`;
+  return`<img class="flag" src="https://flagcdn.com/w${w*2}/${c}.png" width="${w}" height="${h}" alt="${t}">`;
+}
 
-const R32_SLOTS = [
+// ── MATCH SCHEDULE (R32) ─────────────────────────────────────────────────────
+// [date, time ET, venue city]
+const R32_META=[
+  ["Jun 28","3pm ET","Los Angeles"],   // SA vs CAN
+  ["Jun 29","1pm ET","Houston"],       // BRA vs JPN
+  ["Jun 29","4:30pm ET","Boston"],     // GER vs PAR
+  ["Jun 29","9pm ET","Monterrey"],     // NED vs MOR
+  ["Jun 30","1pm ET","Dallas"],        // CIV vs NOR
+  ["Jul 1","5pm ET","New Jersey"],     // FRA vs SWE
+  ["Jul 1","9pm ET","Mexico City"],    // MEX vs ECU
+  ["Jul 2","12pm ET","Atlanta"],       // ENG vs DRC
+  ["Jul 2","4pm ET","Seattle"],        // BEL vs SEN
+  ["Jul 1","8pm ET","Santa Clara"],    // USA vs BIH
+  ["Jul 3","3pm ET","Los Angeles"],    // ESP vs AUT
+  ["Jul 3","6pm ET","Toronto"],        // POR vs CRO
+  ["Jul 2","3pm ET","Las Vegas"],      // SUI vs ALG
+  ["Jul 4","4pm ET","Kansas City"],    // COL vs GHA
+  ["Jul 4","8pm ET","Dallas"],         // AUS vs EGY
+  ["Jul 3","6pm ET","Miami"],          // ARG vs CPV
+];
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+// Locked results: {round: {matchIndex: {winner, score:"X-Y"}}}
+const LOCKED={
+  R32:{ 0:{winner:"Canada", score:"2-0"} }
+};
+
+const R32L=[
   ["South Africa","Canada"],["Brazil","Japan"],["Germany","Paraguay"],["Netherlands","Morocco"],
   ["Côte d'Ivoire","Norway"],["France","Sweden"],["Mexico","Ecuador"],["England","DR Congo"],
+];
+const R32R=[
   ["Belgium","Senegal"],["USA","Bosnia & Herz."],["Spain","Austria"],["Portugal","Croatia"],
   ["Switzerland","Algeria"],["Colombia","Ghana"],["Australia","Egypt"],["Argentina","Cabo Verde"],
 ];
+const R32ALL=[...R32L,...R32R];
 
-const ROUNDS = ["R32","R16","QF","SF","Final"];
-const ROUND_LABELS = {R32:"Round of 32",R16:"Round of 16",QF:"Quarter-Finals",SF:"Semi-Finals",Final:"Final"};
-const ROUND_ABBR = {R32:"R32",R16:"R16",QF:"QF",SF:"SF",Final:"Final"};
-const POINTS = {R32:1,R16:2,QF:4,SF:8,Final:16,Champion:32};
-const ADMIN_PW = "worldcup2026";
+const ROUNDS=["R32","R16","QF","SF","Final"];
+const RLBL={R32:"Round of 32",R16:"Round of 16",QF:"QF",SF:"Semi-Finals",Final:"Final"};
+const RABB={R32:"R32",R16:"R16",QF:"QF",SF:"SF",Final:"Final"};
+// Approx dates for future rounds
+const ROUND_DATES={R16:"Jul 4-6",QF:"Jul 11",SF:"Jul 15",Final:"Jul 19"};
+const PTS={R32:1,R16:2,QF:4,SF:8,Final:16,Champion:32};
+const ADMIN_PW="worldcup2026";
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
-let myPicks = {R32:[],R16:[],QF:[],SF:[],Final:[],Champion:null};
-let myName = "";
-let myLocked = false;
-let entries = [];   // [{name, picks, submittedAt}]
-let results = {R32:[],R16:[],QF:[],SF:[],Final:[]};
-let adminUnlocked = false;
-let currentTab = "bracket";
+let myPicks={R32:[],R16:[],QF:[],SF:[],Final:[],Champion:null};
+let myName="";
+let myLocked=false;
+let entries=[];
+let results={R32:[],R16:[],QF:[],SF:[],Final:[],Champion:null,scores:{}};
+let adminUnlocked=false;
 
-// ── STORAGE ──────────────────────────────────────────────────────────────────
-const STORE_ENTRIES = "wc2026_entries";
-const STORE_RESULTS = "wc2026_results";
-
-function saveEntries() {
-  try { localStorage.setItem(STORE_ENTRIES, JSON.stringify(entries)); } catch(e) {}
-}
-function saveResults() {
-  try { localStorage.setItem(STORE_RESULTS, JSON.stringify(results)); } catch(e) {}
-}
-function loadAll() {
-  try { const e = localStorage.getItem(STORE_ENTRIES); if(e) entries = JSON.parse(e); } catch(e) {}
-  try { const r = localStorage.getItem(STORE_RESULTS); if(r) results = JSON.parse(r); } catch(e) {}
-}
-
-// ── BRACKET LOGIC ────────────────────────────────────────────────────────────
-function slotsFor(round, src) {
-  // src = picks object to use (myPicks, or entry.picks, or results for admin)
-  if (round === "R32") return R32_SLOTS;
-  const prev = {R16:"R32",QF:"R16",SF:"QF",Final:"SF"}[round];
-  const prevSlots = slotsFor(prev, src);
-  const out = [];
-  for (let i = 0; i < prevSlots.length; i+=2) {
-    const a = src[prev]?.[i]   || prevSlots[i]?.[0]   || null;
-    const b = src[prev]?.[i+1] || prevSlots[i+1]?.[0] || null;
-    out.push([a,b]);
+function applyLocked(){
+  for(const[rnd,map]of Object.entries(LOCKED)){
+    results[rnd]=results[rnd]||[];
+    results.scores=results.scores||{};
+    for(const[i,data]of Object.entries(map)){
+      results[rnd][+i]=data.winner;
+      results.scores[`${rnd}_${i}`]=data.score;
+      // Auto-fill picks for locked matches
+      myPicks[rnd]=myPicks[rnd]||[];
+      if(!myPicks[rnd][+i])myPicks[rnd][+i]=data.winner;
+    }
   }
+}
+
+function load(){
+  try{const e=localStorage.getItem('wc26e');if(e)entries=JSON.parse(e)}catch(e){}
+  try{const r=localStorage.getItem('wc26r');if(r)results=JSON.parse(r)}catch(e){}
+  results.scores=results.scores||{};
+  applyLocked();
+}
+function saveE(){try{localStorage.setItem('wc26e',JSON.stringify(entries))}catch(e){}}
+function saveR(){try{localStorage.setItem('wc26r',JSON.stringify(results))}catch(e){}}
+
+// ── LOGIC ─────────────────────────────────────────────────────────────────────
+function allSlots(rnd,src){
+  if(rnd==="R32")return R32ALL;
+  const prev={R16:"R32",QF:"R16",SF:"QF",Final:"SF"}[rnd];
+  const ps=allSlots(prev,src);
+  const out=[];
+  for(let i=0;i<ps.length;i+=2)out.push([src[prev]?.[i]||null,src[prev]?.[i+1]||null]);
   return out;
 }
-
-function roundComplete(round, src) {
-  const s = slotsFor(round, src);
-  return s.length > 0 && s.every((_,i) => !!src[round]?.[i]);
+function halfSlots(rnd,src,side){
+  const all=allSlots(rnd,src);const h=all.length/2;
+  return side==='L'?all.slice(0,h):all.slice(h);
 }
+function isLockedMatch(rnd,idx){return !!LOCKED[rnd]?.[idx]}
+function lockedData(rnd,idx){return LOCKED[rnd]?.[idx]||null}
+function getScore(rnd,idx){return results.scores?.[`${rnd}_${idx}`]||null}
+function getResult(rnd,idx){return results[rnd]?.[idx]||null}
 
-function allComplete(src) {
-  return ROUNDS.every(r => roundComplete(r, src)) && src.Champion;
+function rDone(rnd,src){
+  const s=allSlots(rnd,src);
+  return s.length>0&&s.every((_,i)=>!!src[rnd]?.[i]);
 }
-
-function scoreEntry(entry) {
-  let total = 0;
-  for (const round of ROUNDS) {
-    const ep = entry.picks[round] || [];
-    const rr = results[round] || [];
-    ep.forEach((p,i) => { if(p && rr[i] && p === rr[i]) total += POINTS[round]; });
-  }
-  // Champion bonus
-  if (entry.picks.Champion && results.Champion && entry.picks.Champion === results.Champion) {
-    total += POINTS.Champion;
-  }
-  return total;
+function allDone(src){return ROUNDS.every(r=>rDone(r,src))&&src.Champion}
+function countPicks(src){
+  let t=0;
+  ROUNDS.forEach(r=>{allSlots(r,src).forEach((_,i)=>{if(src[r]?.[i])t++;});});
+  if(src.Champion)t++;return t;
+}
+function totalPicks(){
+  let t=0;ROUNDS.forEach(r=>t+=R32ALL.length/Math.pow(2,ROUNDS.indexOf(r)));
+  return t+1;
+}
+function scoreE(entry){
+  let t=0;
+  ROUNDS.forEach(r=>{(entry.picks[r]||[]).forEach((p,i)=>{if(p&&results[r]?.[i]&&p===results[r][i])t+=PTS[r];});});
+  if(entry.picks.Champion&&results.Champion&&entry.picks.Champion===results.Champion)t+=PTS.Champion;
+  return t;
 }
 
 // ── TABS ─────────────────────────────────────────────────────────────────────
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    t.classList.toggle('active', ['bracket','picks','leaderboard','admin'][i] === tab);
-  });
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+function switchTab(tab){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['bracket','leaderboard','admin'][i]===tab));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+tab).classList.add('active');
-  if (tab === 'bracket') renderBracket();
-  if (tab === 'picks') renderPicks();
-  if (tab === 'leaderboard') renderLeaderboard();
-  if (tab === 'admin') renderAdmin();
+  if(tab==='bracket')renderBracket();
+  if(tab==='leaderboard')renderLB();
+  if(tab==='admin')renderAdmin();
 }
 
-// ── BRACKET TAB ──────────────────────────────────────────────────────────────
-function renderBracket() {
-  const el = document.getElementById('bracketEl');
-  el.innerHTML = '';
+// ── BRACKET ──────────────────────────────────────────────────────────────────
+function renderBracket(){
+  const el=document.getElementById('bracketEl');
+  el.innerHTML='';
+  ["R32","R16","QF","SF"].forEach(r=>el.appendChild(makeCol(r,'L')));
+  el.appendChild(makeCenter());
+  ["SF","QF","R16","R32"].forEach(r=>el.appendChild(makeCol(r,'R')));
+  updateBar();updateHint();
+}
 
-  // Each round gets a column
-  // R32=16 matches, R16=8, QF=4, SF=2, Final=1
-  const roundMatchCounts = {R32:16,R16:8,QF:4,SF:2,Final:1};
-  const maxMatches = 16;
+function makeCol(rnd,side){
+  const col=document.createElement('div');
+  col.className=`bc ${side==='L'?'left-col':'right-col'}`;
+  const dateStr=rnd==='R32'?'':ROUND_DATES[rnd]||'';
+  col.innerHTML=`<div class="bc-lbl">${RABB[rnd]}${dateStr?' · '+dateStr:''}</div>`;
 
-  ROUNDS.forEach(round => {
-    const col = document.createElement('div');
-    col.className = 'b-col';
-    col.innerHTML = `<div class="b-col-label">${ROUND_ABBR[round]}</div>`;
+  const matches=halfSlots(rnd,myPicks,side);
+  const fullLen=allSlots(rnd,myPicks).length;
+  const count=matches.length;
+  const maxCount=8;
+  const unit=maxCount/count;
 
-    const matchesWrap = document.createElement('div');
-    matchesWrap.className = 'b-matches';
-    matchesWrap.style.cssText = 'display:flex;flex-direction:column;gap:0;flex:1';
+  matches.forEach(([a,b],i)=>{
+    const realIdx=side==='L'?i:(fullLen/2+i);
+    const globalMatchIdx=rnd==='R32'?realIdx:null;
 
-    const slots = slotsFor(round, myPicks);
-    const count = slots.length;
-    // spacing: each match occupies (maxMatches/count) units
-    const spacing = maxMatches / count;
+    const sp1=document.createElement('div');
+    sp1.style.cssText=`flex:${unit*0.48};min-height:${unit*12}px`;
+    col.appendChild(sp1);
 
-    slots.forEach(([a,b], i) => {
-      const pick = myPicks[round]?.[i] || null;
-      // spacer before
-      const spacerH = spacing * 0.5;
-      const sp = document.createElement('div');
-      sp.style.cssText = `flex:${spacerH};min-height:${spacerH * 4}px`;
-      matchesWrap.appendChild(sp);
+    const wrap=document.createElement('div');
+    wrap.className='bm-wrap';
+    const bmEl=makeBMatch(rnd,realIdx,a,b,globalMatchIdx);
+    wrap.appendChild(bmEl);
+    col.appendChild(wrap);
 
-      const matchEl = document.createElement('div');
-      matchEl.className = 'b-match';
-
-      const inner = document.createElement('div');
-      inner.className = 'b-match-inner';
-
-      [a,b].forEach(team => {
-        const row = document.createElement('div');
-        const isTbd = !team;
-        row.className = 'b-team' + (pick===team&&team?' picked':'') + (isTbd?' tbd':'');
-        row.innerHTML = `<span class="b-flag">${isTbd?'':''+f(team)}</span><span class="b-name">${isTbd?'TBD':team}</span>${pick===team&&team?'<span class="b-check">✓</span>':''}`;
-        if (!isTbd && !myLocked) {
-          row.onclick = () => makePick(round, i, team);
-        }
-        inner.appendChild(row);
-      });
-
-      matchEl.appendChild(inner);
-      matchesWrap.appendChild(matchEl);
-
-      // spacer after
-      const sp2 = document.createElement('div');
-      sp2.style.cssText = `flex:${spacerH};min-height:${spacerH * 4}px`;
-      matchesWrap.appendChild(sp2);
-    });
-
-    col.appendChild(matchesWrap);
-    el.appendChild(col);
+    const sp2=document.createElement('div');
+    sp2.style.cssText=`flex:${unit*0.48};min-height:${unit*12}px`;
+    col.appendChild(sp2);
   });
-
-  // Champion column
-  const champCol = document.createElement('div');
-  champCol.className = 'b-champ-col';
-  const champ = myPicks.Champion;
-  champCol.innerHTML = `
-    <div class="b-champ-label">🏆 Champion</div>
-    ${champ
-      ? `<div class="b-champ-box"><span class="b-champ-flag">${f(champ)}</span><div class="b-champ-name">${champ}</div></div>`
-      : `<div class="b-champ-box"><span class="b-champ-trophy">🏆</span><div style="font-size:9px;color:var(--chalk-d)">TBD</div></div>`
-    }
-    ${myName ? `<div style="margin-top:14px;font-size:9px;color:var(--chalk-d);letter-spacing:1.5px;text-align:center">${myName.toUpperCase()}</div>` : ''}
-  `;
-  el.appendChild(champCol);
+  return col;
 }
 
-// ── PICKS TAB ────────────────────────────────────────────────────────────────
-function onNameInput(val) {
-  myName = val.trim();
-  const existing = entries.find(e => e.name.toLowerCase() === myName.toLowerCase());
-  if (existing && !myLocked) {
-    myPicks = JSON.parse(JSON.stringify(existing.picks));
-    myLocked = true;
-  } else if (!existing && myLocked) {
-    myLocked = false;
-    myPicks = {R32:[],R16:[],QF:[],SF:[],Final:[],Champion:null};
+function makeBMatch(rnd,idx,a,b,globalMatchIdx){
+  const wrap=document.createElement('div');
+  const isLocked=isLockedMatch(rnd,idx);
+  const ldata=lockedData(rnd,idx);
+  const result=getResult(rnd,idx);
+  const score=getScore(rnd,idx);
+  const hasResult=!!result;
+  const pick=isLocked?ldata.winner:(myPicks[rnd]?.[idx]||null);
+
+  wrap.className='bm'+(hasResult?' match-played':'');
+
+  // date/meta for R32
+  if(globalMatchIdx!=null&&R32_META[globalMatchIdx]){
+    const[date,time,venue]=R32_META[globalMatchIdx];
+    const meta=document.createElement('div');
+    meta.className='bm-meta';
+    meta.textContent=`${date} · ${time} · ${venue}`;
+    wrap.appendChild(meta);
   }
-  renderPicks();
-}
 
-function makePick(round, idx, team) {
-  if (myLocked) return;
-  myPicks[round] = myPicks[round] || [];
-  myPicks[round][idx] = team;
-  // Cascade clear downstream
-  const ri = ROUNDS.indexOf(round);
-  for (let i = ri+1; i < ROUNDS.length; i++) myPicks[ROUNDS[i]] = [];
-  myPicks.Champion = null;
-  // Auto-set champion when Final is picked
-  if (round === 'Final') myPicks.Champion = team;
-  renderPicks();
-  if (currentTab === 'bracket') renderBracket();
-}
+  const inner=document.createElement('div');
+  inner.className='bm-inner';
 
-function renderPicks() {
-  const banner = document.getElementById('lockedBanner');
-  banner.style.display = myLocked ? 'flex' : 'none';
+  [a,b].forEach(team=>{
+    if(!team){
+      const row=document.createElement('div');
+      row.className='bt tbd';
+      row.innerHTML=`<span class="bn">TBD</span>`;
+      inner.appendChild(row);return;
+    }
 
-  const nameInput = document.getElementById('nameInput');
-  if (nameInput.value !== (myName || '')) nameInput.value = myName || '';
-  nameInput.disabled = myLocked;
+    const isPicked=pick===team;
+    const isCorrect=hasResult&&isPicked&&result===team;
+    const isWrong=hasResult&&isPicked&&result!==team;
+    const isLockedWin=isLocked&&team===ldata.winner;
 
-  const cont = document.getElementById('picksContent');
-  cont.innerHTML = '';
+    let cls='bt';
+    if(isLockedWin||isCorrect)cls+=' correct no-pick';
+    else if(isWrong)cls+=' wrong no-pick';
+    else if(isPicked)cls+=' picked';
+    if(isLocked||hasResult)cls+=' no-pick';
 
-  ROUNDS.forEach(round => {
-    const slots = slotsFor(round, myPicks);
-    const section = document.createElement('div');
-    section.style.marginBottom = '20px';
-    section.innerHTML = `<div class="round-label">${ROUND_LABELS[round]} <span style="font-size:9px;font-family:'Inter',sans-serif;color:var(--chalk-d);letter-spacing:1px">· ${POINTS[round]} pt${POINTS[round]>1?'s':''} each</span></div>`;
+    const row=document.createElement('div');
+    row.className=cls;
+    // Show score next to winner
+    const teamScore=score&&hasResult?(result===team?score.split('-')[0]:score.split('-')[1]):'';
+    row.innerHTML=`${fi(team,15,11)}<span class="bn">${team}</span>${teamScore?`<span class="bscore">${teamScore}</span>`:''}`;
+    if(team&&!isLocked&&!hasResult&&!myLocked)row.onclick=()=>makePick(rnd,idx,team);
+    inner.appendChild(row);
 
-    slots.forEach(([a,b], i) => {
-      const pick = myPicks[round]?.[i];
-      const tbd = !a && !b;
-      const card = document.createElement('div');
-      card.className = 'pick-match';
-      card.innerHTML = `<div class="pick-match-head"><span class="pick-match-num">Match ${i+1}</span></div>`;
-      [a||null, b||null].forEach(team => {
-        const row = document.createElement('div');
-        row.className = 'pick-team' + (pick===team&&team?' picked':'') + (!team?' tbd':'');
-        row.innerHTML = `
-          <div class="pt-radio"></div>
-          <span class="pt-flag">${team?f(team):'🏳️'}</span>
-          <span class="pt-name">${team||'TBD'}</span>`;
-        if (team && !myLocked) {
-          row.onclick = () => makePick(round, i, team);
-        }
-        card.appendChild(row);
-      });
-      section.appendChild(card);
-    });
-    cont.appendChild(section);
+    // Wrong pick: show actual winner below
+    if(isWrong&&result){
+      const act=document.createElement('div');
+      act.className='bt-actual';
+      act.innerHTML=`${fi(result,13,9)}<span style="margin-left:3px">→ ${result}</span>`;
+      inner.appendChild(act);
+    }
   });
 
-  // Submit button
-  const canSubmit = allComplete(myPicks) && myName && !myLocked;
-  const btn = document.createElement('button');
-  btn.className = 'submit-btn';
-  btn.disabled = !canSubmit;
-  btn.textContent = myLocked ? '🔒 Picks Locked' : 'Submit & Lock Picks 🔒';
-  if (!myLocked) btn.onclick = submitPicks;
-  cont.appendChild(btn);
+  wrap.appendChild(inner);
+  return wrap;
 }
 
-function submitPicks() {
-  if (!myName) return;
-  if (!allComplete(myPicks)) return;
-  const entry = {name: myName, picks: JSON.parse(JSON.stringify(myPicks)), submittedAt: Date.now()};
-  entries = [...entries.filter(e => e.name.toLowerCase() !== myName.toLowerCase()), entry];
-  myLocked = true;
-  saveEntries();
-  renderPicks();
-  // Show surprise
-  document.getElementById('surpriseOverlay').classList.add('show');
+function makeCenter(){
+  const col=document.createElement('div');
+  col.className='bc-center';
+  const sf=myPicks['SF']||[];
+  const f1=myPicks['Final']?.[0]||sf[0]||null;
+  const f2=myPicks['Final']?.[1]||sf[1]||null;
+  const champ=myPicks.Champion||null;
+  col.innerHTML=`
+    <div class="c-lbl">Final · Jul 19</div>
+    <div class="c-slot${!f1?' empty':''}">
+      ${f1?`${fi(f1,16,12)}<span class="cs-name">${f1}</span>`:'<span>TBD</span>'}
+    </div>
+    <div class="c-trophy">🏆</div>
+    <div class="c-slot${!f2?' empty':''}">
+      ${f2?`${fi(f2,16,12)}<span class="cs-name">${f2}</span>`:'<span>TBD</span>'}
+    </div>
+    ${champ?`<div class="c-champ">
+      <div style="margin-top:6px">${fi(champ,22,16)}</div>
+      <div class="c-champ-name">${champ}</div>
+      <div class="c-champ-lbl">My Pick</div>
+    </div>`:''}
+    ${myName?`<div style="font-size:7.5px;color:var(--chalk-d);letter-spacing:1.5px;margin-top:8px;font-family:'Oswald',sans-serif;text-align:center">${myName.toUpperCase()}</div>`:''}
+  `;
+  return col;
 }
 
-function closeSuprise() {
-  document.getElementById('surpriseOverlay').classList.remove('show');
+function updateHint(){
+  const h=document.getElementById('bracketHint');
+  if(myLocked){h.textContent='🔒 Picks locked — results update as matches finish';h.style.color='var(--green)';return;}
+  if(!myName){h.textContent='Enter your name above · tap teams to pick winners';h.style.color='var(--chalk-d)';return;}
+  h.textContent='Tap teams to pick winners all the way to the champion';h.style.color='var(--chalk-d)';
 }
+
+function updateBar(){
+  const btn=document.getElementById('submitBtn');
+  const prog=document.getElementById('submitProg');
+  const bar=document.getElementById('submitBar');
+  if(myLocked){bar.style.display='none';return;}
+  bar.style.display='flex';
+  const done=countPicks(myPicks);
+  const tot=63; // 16+8+4+2+1 matches + champion
+  const ready=allDone(myPicks)&&!!myName;
+  prog.textContent=`${done} / ${tot} picks`;
+  btn.disabled=!ready;
+}
+
+// ── PICKING ──────────────────────────────────────────────────────────────────
+function makePick(rnd,idx,team){
+  if(myLocked)return;
+  if(isLockedMatch(rnd,idx))return;
+  if(!myName){document.getElementById('nameInput').focus();return;}
+  myPicks[rnd]=myPicks[rnd]||[];
+  myPicks[rnd][idx]=team;
+  const ri=ROUNDS.indexOf(rnd);
+  for(let i=ri+1;i<ROUNDS.length;i++)myPicks[ROUNDS[i]]=[];
+  myPicks.Champion=null;
+  if(rnd==='Final')myPicks.Champion=team;
+  applyLocked();
+  renderBracket();
+}
+
+function onName(val){
+  myName=val.trim();
+  const ex=entries.find(e=>e.name.toLowerCase()===myName.toLowerCase());
+  if(ex&&!myLocked){myPicks=JSON.parse(JSON.stringify(ex.picks));myLocked=true;applyLocked();}
+  else if(!ex&&myLocked){myLocked=false;myPicks={R32:[],R16:[],QF:[],SF:[],Final:[],Champion:null};applyLocked();}
+  document.getElementById('lockBadge').style.display=myLocked?'inline-flex':'none';
+  document.getElementById('nameInput').disabled=myLocked;
+  renderBracket();
+}
+
+function submitPicks(){
+  if(!myName||!allDone(myPicks))return;
+  const entry={name:myName,picks:JSON.parse(JSON.stringify(myPicks)),submittedAt:Date.now()};
+  entries=[...entries.filter(e=>e.name.toLowerCase()!==myName.toLowerCase()),entry];
+  myLocked=true;saveE();
+  document.getElementById('lockBadge').style.display='inline-flex';
+  document.getElementById('nameInput').disabled=true;
+  document.getElementById('submitBar').style.display='none';
+  document.getElementById('surprise').classList.add('show');
+  renderBracket();
+}
+function closeSurprise(){document.getElementById('surprise').classList.remove('show');}
 
 // ── LEADERBOARD ───────────────────────────────────────────────────────────────
-function renderLeaderboard() {
-  const cont = document.getElementById('lbContent');
-  if (entries.length === 0) {
-    cont.innerHTML = '<div class="lb-empty">No picks submitted yet.<br>Share the link with your friends!</div>';
-    return;
-  }
-  const board = [...entries]
-    .map(e => ({name:e.name, score:scoreEntry(e), champ:e.picks.Champion}))
-    .sort((a,b) => b.score - a.score);
-
-  cont.innerHTML = '';
-  board.forEach((e, i) => {
-    const row = document.createElement('div');
-    row.className = 'lb-row' + (i===0?' first':'');
-    const rankColor = i===0?'var(--gold)':i===1?'#aaa':i===2?'#cd7f32':'var(--chalk-d)';
-    row.innerHTML = `
-      <div class="lb-rank" style="color:${rankColor}">${i+1}</div>
+function renderLB(){
+  const el=document.getElementById('lbEl');
+  if(!entries.length){el.innerHTML='<div class="lb-empty">No picks yet.<br>Share <strong>thomassacks.github.io/WC2026</strong><br>with your crew!</div>';return;}
+  const board=[...entries].map(e=>({name:e.name,score:scoreE(e),champ:e.picks.Champion})).sort((a,b)=>b.score-a.score);
+  el.innerHTML='';
+  board.forEach((e,i)=>{
+    const rc=i===0?'var(--gold)':i===1?'#999':i===2?'#cd7f32':'var(--chalk-d)';
+    const row=document.createElement('div');
+    row.className='lb-row'+(i===0?' top':'');
+    row.innerHTML=`
+      <div class="lb-rank" style="color:${rc}">${i+1}</div>
       <div class="lb-info">
-        <div class="lb-name">${e.name} <span class="lb-lock">🔒</span></div>
-        <div class="lb-champ">${e.champ?f(e.champ)+' '+e.champ:'No champion pick'}</div>
+        <div class="lb-name">${e.name} <span style="font-size:8px;opacity:0.4">🔒</span></div>
+        <div class="lb-champ">${e.champ?fi(e.champ,13,9)+' <span>'+e.champ+'</span>':'—'}</div>
       </div>
-      <div style="text-align:right">
-        <span class="lb-score" style="color:${i===0?'var(--gold)':'var(--chalk)'}">${e.score}</span><span class="lb-pts">pts</span>
+      <div>
+        <div class="lb-score" style="color:${i===0?'var(--gold)':'var(--chalk)'}">${e.score}</div>
+        <div class="lb-pts">pts</div>
       </div>`;
-    cont.appendChild(row);
+    el.appendChild(row);
   });
 }
 
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
-function renderAdmin() {
-  const cont = document.getElementById('adminContent');
-  if (!adminUnlocked) {
-    cont.innerHTML = `
-      <div class="admin-unlock">
-        <div style="font-size:13px;color:var(--chalk-d);margin-bottom:8px">Password-protected — only you can enter results.</div>
-        <input class="admin-pw-input" type="password" id="adminPw" placeholder="Password…" onkeydown="if(event.key==='Enter')tryUnlock()">
-        <button class="admin-unlock-btn" onclick="tryUnlock()">Unlock</button>
-        <div style="font-size:10px;color:var(--chalk-d);margin-top:10px">Default: <code style="color:var(--gold)">worldcup2026</code></div>
-      </div>`;
-    return;
+function renderAdmin(){
+  const el=document.getElementById('adminEl');
+  if(!adminUnlocked){
+    el.innerHTML=`<div class="admin-box">
+      <div style="font-size:11px;color:var(--chalk-d);margin-bottom:4px">Enter results + scores as matches finish.</div>
+      <input class="admin-pw" type="password" id="apw" placeholder="Password…" onkeydown="if(event.key==='Enter')tryUnlock()">
+      <button class="admin-unlock-btn" onclick="tryUnlock()">Unlock</button>
+      <div style="font-size:9px;color:var(--chalk-d);margin-top:8px">Default: <code style="color:var(--gold)">worldcup2026</code></div>
+    </div>`;return;
   }
-
-  cont.innerHTML = '<div style="font-size:12px;color:var(--chalk-d);margin-bottom:16px">Click the winning team for each completed match, then save.</div>';
-
-  ROUNDS.forEach(round => {
-    // Build slots from actual results
-    const adminSrc = {R32:results.R32||[],R16:results.R16||[],QF:results.QF||[],SF:results.SF||[],Final:results.Final||[]};
-    let slots;
-    if (round === 'R32') {
-      slots = R32_SLOTS;
-    } else {
-      const prev = {R16:'R32',QF:'R16',SF:'QF',Final:'SF'}[round];
-      const prevRes = results[prev] || [];
-      slots = [];
-      for (let i = 0; i < prevRes.length; i+=2) {
-        slots.push([prevRes[i]||null, prevRes[i+1]||null]);
-      }
+  el.innerHTML='<div style="font-size:10px;color:var(--chalk-d);margin-bottom:14px">Click winner · enter score · save.</div>';
+  ROUNDS.forEach(rnd=>{
+    let aSlots;
+    if(rnd==='R32'){aSlots=R32ALL;}
+    else{
+      const prev={R16:'R32',QF:'R16',SF:'QF',Final:'SF'}[rnd];
+      const pr=results[prev]||[];
+      aSlots=[];for(let i=0;i<pr.length;i+=2)aSlots.push([pr[i]||null,pr[i+1]||null]);
     }
-    if (slots.length === 0) return;
-
-    const section = document.createElement('div');
-    section.innerHTML = `<div class="admin-round-label">${ROUND_LABELS[round]}</div>`;
-    const grid = document.createElement('div');
-    grid.className = 'admin-grid';
-
-    slots.forEach(([a,b],i) => {
-      const winner = results[round]?.[i];
-      const card = document.createElement('div');
-      card.className = 'admin-match';
-      card.innerHTML = `<div class="admin-match-head">Match ${i+1}${winner?` · Winner: ${f(winner)} ${winner}`:''}</div>`;
-      [a,b].forEach(team => {
-        const row = document.createElement('div');
-        row.className = 'admin-team' + (winner===team&&team?' winner':'');
-        row.innerHTML = `<span>${team?f(team):'🏳️'}</span><span>${team||'TBD'}</span>${winner===team?'<span style="margin-left:auto;font-size:10px">✓</span>':''}`;
-        if (team) row.onclick = () => { setResult(round, i, team); renderAdmin(); };
+    if(!aSlots.length)return;
+    const sec=document.createElement('div');
+    sec.innerHTML=`<div class="admin-rnd">${RLBL[rnd]}</div>`;
+    const grid=document.createElement('div');grid.className='admin-grid';
+    aSlots.forEach(([a,b],i)=>{
+      const w=results[rnd]?.[i];
+      const locked=isLockedMatch(rnd,i);
+      const sc=results.scores?.[`${rnd}_${i}`]||'';
+      const card=document.createElement('div');card.className='admin-card';
+      const scoreKey=`score_${rnd}_${i}`;
+      card.innerHTML=`<div class="admin-card-h">Match ${i+1}${locked?' · FINAL':''}</div>`;
+      [a,b].forEach(team=>{
+        const row=document.createElement('div');
+        row.className='admin-team'+(w===team&&team?' winner':'');
+        row.innerHTML=`${fi(team||'',13,9)}<span>${team||'TBD'}</span>${w===team?'<span style="margin-left:auto;font-size:10px">✓</span>':''}`;
+        if(team&&!locked)row.onclick=()=>{results[rnd]=results[rnd]||[];results[rnd][i]=team;if(rnd==='Final')results.Champion=team;renderAdmin();};
         card.appendChild(row);
       });
+      if(!locked){
+        const sr=document.createElement('div');sr.className='admin-score-row';
+        sr.innerHTML=`<span class="admin-score-label">Score</span>
+          <input class="admin-score-input" id="${scoreKey}" value="${sc}" placeholder="2-1" maxlength="5">`;
+        card.appendChild(sr);
+      } else {
+        const sl=document.createElement('div');sl.style.cssText='padding:3px 8px 5px;font-size:9px;color:var(--green)';
+        sl.textContent=`Final: ${sc||'—'}`;card.appendChild(sl);
+      }
       grid.appendChild(card);
     });
-
-    section.appendChild(grid);
-    cont.appendChild(section);
+    sec.appendChild(grid);el.appendChild(sec);
   });
-
-  const saveBtn = document.createElement('button');
-  saveBtn.className = 'admin-save-btn';
-  saveBtn.textContent = 'Save Results';
-  saveBtn.onclick = () => { saveResults(); alert('Results saved!'); };
-  cont.appendChild(saveBtn);
+  const btn=document.createElement('button');btn.className='admin-save';btn.textContent='Save All Results';
+  btn.onclick=()=>{
+    // collect scores
+    results.scores=results.scores||{};
+    ROUNDS.forEach(rnd=>{
+      const aSlots=rnd==='R32'?R32ALL:[];
+      const len=rnd==='R32'?16:rnd==='R16'?8:rnd==='QF'?4:rnd==='SF'?2:1;
+      for(let i=0;i<len;i++){
+        if(isLockedMatch(rnd,i))continue;
+        const inp=document.getElementById(`score_${rnd}_${i}`);
+        if(inp&&inp.value.trim())results.scores[`${rnd}_${i}`]=inp.value.trim();
+      }
+    });
+    applyLocked();saveR();alert('Results saved!');renderBracket();
+  };
+  el.appendChild(btn);
 }
-
-function tryUnlock() {
-  const pw = document.getElementById('adminPw')?.value;
-  if (pw === ADMIN_PW) { adminUnlocked = true; renderAdmin(); }
-  else alert('Wrong password');
-}
-
-function setResult(round, idx, team) {
-  results[round] = results[round] || [];
-  results[round][idx] = team;
-  // Set champion if Final result set
-  if (round === 'Final' && idx === 0) results.Champion = team;
-}
+function tryUnlock(){const pw=document.getElementById('apw')?.value;if(pw===ADMIN_PW){adminUnlocked=true;renderAdmin();}else alert('Wrong password');}
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
-loadAll();
+load();
 renderBracket();
 </script>
 </body>
